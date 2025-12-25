@@ -25,7 +25,7 @@ describe('Path Finding with Constraints', () => {
       const paths = findPathsWithConstraints(graph, a, c, { maxLength: 2 });
 
       expect(paths.length).toBeGreaterThan(0);
-      expect(paths.every((path) => path.length <= 2)).toBe(true);
+      expect(paths.every(path => path.length <= 2)).toBe(true);
     });
 
     it('should find paths with maxWeight constraint', () => {
@@ -39,18 +39,20 @@ describe('Path Finding with Constraints', () => {
       const paths = findPathsWithConstraints(graph, a, c, { maxWeight: 8 });
 
       expect(paths.length).toBeGreaterThan(0);
-      expect(paths.every((path) => {
-        let weight = 0;
-        for (let i = 0; i < path.length - 1; i++) {
-          for (const branch of graph.branches()) {
-            if (branch.from === path[i] && branch.to === path[i + 1]) {
-              weight += branch.weight || 0;
-              break;
+      expect(
+        paths.every(path => {
+          let weight = 0;
+          for (let i = 0; i < path.length - 1; i++) {
+            for (const branch of graph.branches()) {
+              if (branch.from === path[i] && branch.to === path[i + 1]) {
+                weight += branch.weight || 0;
+                break;
+              }
             }
           }
-        }
-        return weight <= 8;
-      })).toBe(true);
+          return weight <= 8;
+        })
+      ).toBe(true);
     });
 
     it('should find paths with branchFilter', () => {
@@ -62,7 +64,7 @@ describe('Path Finding with Constraints', () => {
       graph.addBranch(a, c, 10);
 
       const paths = findPathsWithConstraints(graph, a, c, {
-        branchFilter: (branch) => (branch.weight || 0) < 10,
+        branchFilter: branch => (branch.weight || 0) < 10,
       });
 
       expect(paths.length).toBeGreaterThan(0);
@@ -77,11 +79,11 @@ describe('Path Finding with Constraints', () => {
       graph.addBranch(a, c);
 
       const paths = findPathsWithConstraints(graph, a, c, {
-        leafFilter: (leaf) => leaf.id !== 'b',
+        leafFilter: leaf => leaf.id !== 'b',
       });
 
       // Should only find direct path a->c
-      expect(paths.some((path) => path.length === 2 && path[0] === a && path[1] === c)).toBe(true);
+      expect(paths.some(path => path.length === 2 && path[0] === a && path[1] === c)).toBe(true);
     });
 
     it('should respect maxPaths constraint', () => {
@@ -145,7 +147,7 @@ describe('Path Finding with Constraints', () => {
       const paths = findPathsAvoiding(graph, a, c, [b]);
 
       expect(paths.length).toBeGreaterThan(0);
-      expect(paths.every((path) => !path.includes(b))).toBe(true);
+      expect(paths.every(path => !path.includes(b))).toBe(true);
     });
 
     it('should return empty array if all paths are blocked', () => {
@@ -173,7 +175,7 @@ describe('Path Finding with Constraints', () => {
       const paths = findPathsThrough(graph, a, c, [b]);
 
       expect(paths.length).toBeGreaterThan(0);
-      expect(paths.every((path) => path.includes(b))).toBe(true);
+      expect(paths.every(path => path.includes(b))).toBe(true);
     });
 
     it('should return empty array if no path includes required leaves', () => {
@@ -188,4 +190,3 @@ describe('Path Finding with Constraints', () => {
     });
   });
 });
-

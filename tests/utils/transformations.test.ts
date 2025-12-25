@@ -39,9 +39,7 @@ describe('Transformations', () => {
       graph.addBranch(a, b, 5);
 
       const reversed = reverseGraph(graph);
-      const branch = reversed.branches().find(
-        (br) => br.from.id === 'b' && br.to.id === 'a'
-      );
+      const branch = reversed.branches().find(br => br.from.id === 'b' && br.to.id === 'a');
 
       expect(branch?.weight).toBe(5);
     });
@@ -77,7 +75,7 @@ describe('Transformations', () => {
       const undirected = toUndirected(graph);
       const branches = undirected.branches();
 
-      expect(branches.every((br) => br.weight === 5)).toBe(true);
+      expect(branches.every(br => br.weight === 5)).toBe(true);
     });
 
     it('should handle multiple branches', () => {
@@ -124,7 +122,7 @@ describe('Transformations', () => {
       graph.addBranch(a, b, 5);
       graph.addBranch(b, c, 3);
 
-      const filtered = filterBranches(graph, (branch) => (branch.weight || 0) > 4);
+      const filtered = filterBranches(graph, branch => (branch.weight || 0) > 4);
 
       expect(filtered.branchCount()).toBe(1);
       expect(filtered.hasBranch(filtered.getLeaf('a')!, filtered.getLeaf('b')!)).toBe(true);
@@ -149,7 +147,7 @@ describe('Transformations', () => {
       graph.addLeaf('B', 'b');
       graph.addLeaf('C', 'c');
 
-      const filtered = filterLeaves(graph, (leaf) => leaf.id === 'a' || leaf.id === 'b');
+      const filtered = filterLeaves(graph, leaf => leaf.id === 'a' || leaf.id === 'b');
 
       expect(filtered.size()).toBe(2);
       expect(filtered.hasLeaf('a')).toBe(true);
@@ -165,7 +163,7 @@ describe('Transformations', () => {
       graph.addBranch(a, b);
       graph.addBranch(b, c);
 
-      const filtered = filterLeaves(graph, (leaf) => leaf.id === 'a' || leaf.id === 'b');
+      const filtered = filterLeaves(graph, leaf => leaf.id === 'a' || leaf.id === 'b');
 
       expect(filtered.branchCount()).toBe(1);
       expect(filtered.hasBranch(filtered.getLeaf('a')!, filtered.getLeaf('b')!)).toBe(true);
@@ -179,11 +177,10 @@ describe('Transformations', () => {
       graph.addBranch(a, b);
       graph.addBranch(b, c);
 
-      const filtered = filterLeaves(graph, (leaf) => leaf.id === 'a' || leaf.id === 'b');
+      const filtered = filterLeaves(graph, leaf => leaf.id === 'a' || leaf.id === 'b');
 
       expect(filtered.branchCount()).toBe(1);
       expect(filtered.hasBranch(filtered.getLeaf('a')!, filtered.getLeaf('b')!)).toBe(true);
     });
   });
 });
-

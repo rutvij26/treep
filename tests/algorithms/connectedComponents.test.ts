@@ -32,8 +32,10 @@ describe('Connected Components', () => {
       const components = findConnectedComponents(graph);
 
       expect(components).toHaveLength(2);
-      expect(components.some((comp) => comp.length === 2 && comp.includes(a) && comp.includes(b))).toBe(true);
-      expect(components.some((comp) => comp.length === 1 && comp.includes(c))).toBe(true);
+      expect(
+        components.some(comp => comp.length === 2 && comp.includes(a) && comp.includes(b))
+      ).toBe(true);
+      expect(components.some(comp => comp.length === 1 && comp.includes(c))).toBe(true);
     });
 
     it('should handle empty graph', () => {
@@ -53,7 +55,7 @@ describe('Connected Components', () => {
       const components = findConnectedComponents(graph);
 
       expect(components).toHaveLength(3);
-      expect(components.every((comp) => comp.length === 1)).toBe(true);
+      expect(components.every(comp => comp.length === 1)).toBe(true);
     });
 
     it('should handle complex connected graph', () => {
@@ -87,10 +89,10 @@ describe('Connected Components', () => {
 
       expect(components.length).toBeGreaterThan(0);
       // a and b should be in same component (they form a cycle)
-      const abComponent = components.find((comp) => comp.includes(a) && comp.includes(b));
+      const abComponent = components.find(comp => comp.includes(a) && comp.includes(b));
       // Note: The algorithm uses reversed graph, so we check that both are in components
-      expect(components.some((comp) => comp.includes(a))).toBe(true);
-      expect(components.some((comp) => comp.includes(b))).toBe(true);
+      expect(components.some(comp => comp.includes(a))).toBe(true);
+      expect(components.some(comp => comp.includes(b))).toBe(true);
       // If a and b are strongly connected, they should be in the same component
       if (abComponent) {
         expect(abComponent).toBeDefined();
@@ -147,4 +149,3 @@ describe('Connected Components', () => {
     });
   });
 });
-
