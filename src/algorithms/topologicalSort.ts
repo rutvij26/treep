@@ -47,21 +47,20 @@ export function topologicalSort<T>(graph: Graph<T>): Node<T>[] {
     }
   }
 
-  // Process leaves
-  while (queue.length > 0) {
-    const current = queue.shift()!;
+  // Process leaves - optimized with index-based queue
+  let queueIndex = 0;
+  while (queueIndex < queue.length) {
+    const current = queue[queueIndex++];
     result.push(current);
 
-    // Decrease in-degree for all neighbors
-    for (const branch of graph.branches()) {
-      if (branch.from === current) {
-        const neighborInDegree = inDegree.get(branch.to) || 0;
-        inDegree.set(branch.to, neighborInDegree - 1);
+    // Decrease in-degree for all neighbors - only check current node's branches
+    for (const branch of current.branches) {
+      const neighborInDegree = inDegree.get(branch.to) || 0;
+      inDegree.set(branch.to, neighborInDegree - 1);
 
-        // If in-degree becomes 0, add to queue
-        if (neighborInDegree - 1 === 0) {
-          queue.push(branch.to);
-        }
+      // If in-degree becomes 0, add to queue
+      if (neighborInDegree - 1 === 0) {
+        queue.push(branch.to);
       }
     }
   }

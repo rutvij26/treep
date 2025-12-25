@@ -40,4 +40,17 @@ describe('ValidationError', () => {
     const userErrors = error.getErrorsForPath('user');
     expect(userErrors).toHaveLength(3);
   });
+
+  it('should create validation error with empty errors array', () => {
+    // Test line 20: errors parameter with empty array
+    const error = new ValidationError('Validation failed', []);
+    expect(error.errors).toEqual([]);
+    expect(error.getPaths()).toEqual([]);
+  });
+
+  it('should create validation error without errors parameter', () => {
+    // Test line 20: errors parameter defaulting to empty array
+    const error = new ValidationError('Validation failed');
+    expect(error.errors).toEqual([]);
+  });
 });

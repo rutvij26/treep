@@ -22,6 +22,7 @@ export {
   findPathsThrough,
 } from './algorithms/pathFinding';
 export type { PathConstraints } from './algorithms/pathFinding';
+export { lazyBFS, lazyDFS, lazyFindPaths, lazyAllPaths, lazyFindLeaves } from './algorithms/lazy';
 
 // Errors
 export {
@@ -64,6 +65,9 @@ export {
   transpose,
   filterBranches,
   filterLeaves,
+  fromJSONStream,
+  toJSONStream,
+  toAsyncStream,
 } from './utils';
 export type {
   NormalizeOptions,
@@ -80,4 +84,5 @@ export type {
   BranchPredicate,
   QueryLeavesOptions,
   SubgraphOptions,
+  StreamingJSONOptions,
 } from './utils';

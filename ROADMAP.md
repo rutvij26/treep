@@ -36,12 +36,12 @@ This document outlines the planned features and improvements for Treep.
 - [x] Path finding with constraints
 - [x] Graph transformations (reverse, transpose, undirected)
 
-### Phase 4: Performance & Optimization
+### Phase 4: Performance & Optimization ✅
 
-- [ ] Performance benchmarks
-- [ ] Memory optimization for very large graphs
-- [ ] Lazy evaluation for large result sets
-- [ ] Streaming support for huge JSON files
+- [x] Performance benchmarks
+- [x] Memory optimization for very large graphs
+- [x] Lazy evaluation for large result sets
+- [x] Streaming support for huge JSON files
 
 ### Phase 5: Documentation
 - [] Github Pages

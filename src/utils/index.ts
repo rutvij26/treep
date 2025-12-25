@@ -51,3 +51,9 @@ export {
   filterBranches,
   filterLeaves,
 } from './transformations';
+export {
+  fromJSONStream,
+  toJSONStream,
+  toAsyncStream,
+  type StreamingJSONOptions,
+} from './streaming';

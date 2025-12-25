@@ -138,9 +138,12 @@ export function findShortestPathWithConstraints<T>(
   to: Node<T>,
   constraints: PathConstraints<T> = {}
 ): Node<T>[] {
+  // Get all paths (or up to a reasonable limit) to find the shortest
+  // Remove maxPaths from constraints to get all paths, but respect user's maxPaths if set
+  const { maxPaths, ...otherConstraints } = constraints;
   const paths = findPathsWithConstraints(graph, from, to, {
-    ...constraints,
-    maxPaths: 1, // Only need shortest
+    ...otherConstraints,
+    maxPaths: maxPaths || 100, // Default to 100 to get multiple paths for comparison
   });
 
   if (paths.length === 0) {

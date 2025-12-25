@@ -18,8 +18,18 @@ export function shortestPath<T>(
     return [startLeaf];
   }
 
-  // Check if graph is weighted
-  const isWeighted = branches?.some(branch => branch.isWeighted()) ?? false;
+  // Check if graph is weighted - optimized: only check first few branches
+  let isWeighted = false;
+  if (branches) {
+    // Check up to 10 branches to determine if weighted (faster than checking all)
+    const checkLimit = Math.min(10, branches.length);
+    for (let i = 0; i < checkLimit; i++) {
+      if (branches[i].isWeighted()) {
+        isWeighted = true;
+        break;
+      }
+    }
+  }
 
   if (isWeighted && branches) {
     return dijkstra(startLeaf, endLeaf, branches);
@@ -30,16 +40,18 @@ export function shortestPath<T>(
 
 /**
  * BFS-based shortest path for unweighted graphs
+ * Optimized with index-based queue to avoid O(n) shift() operations
  */
 function bfsShortestPath<T>(startLeaf: Node<T>, endLeaf: Node<T>): Node<T>[] {
   const visited: Set<Node<T>> = new Set();
   const queue: Node<T>[] = [startLeaf];
   const parent: Map<Node<T>, Node<T>> = new Map();
+  let queueIndex = 0;
 
   visited.add(startLeaf);
 
-  while (queue.length > 0) {
-    const current = queue.shift()!;
+  while (queueIndex < queue.length) {
+    const current = queue[queueIndex++];
 
     if (current === endLeaf) {
       return reconstructPath(parent, startLeaf, endLeaf);
@@ -79,7 +91,9 @@ function dijkstra<T>(startLeaf: Node<T>, endLeaf: Node<T>, branches: Branch<T>[]
   distances.set(startLeaf, 0);
 
   // Priority queue using array (for simplicity, can be optimized with binary heap)
+  // Use Set for O(1) lookup instead of O(n) includes()
   const unvisited: Node<T>[] = [startLeaf];
+  const unvisitedSet: Set<Node<T>> = new Set([startLeaf]);
 
   while (unvisited.length > 0) {
     // Find leaf with minimum distance
@@ -94,7 +108,11 @@ function dijkstra<T>(startLeaf: Node<T>, endLeaf: Node<T>, branches: Branch<T>[]
       }
     }
 
-    const current = unvisited.splice(minIndex, 1)[0];
+    // Remove from both array and set
+    const current = unvisited[minIndex];
+    unvisited[minIndex] = unvisited[unvisited.length - 1];
+    unvisited.pop();
+    unvisitedSet.delete(current);
     visited.add(current);
 
     if (current === endLeaf) {
@@ -117,8 +135,10 @@ function dijkstra<T>(startLeaf: Node<T>, endLeaf: Node<T>, branches: Branch<T>[]
         distances.set(neighbor, newDistance);
         parent.set(neighbor, current);
 
-        if (!unvisited.includes(neighbor)) {
+        // Use Set for O(1) lookup instead of O(n) includes()
+        if (!unvisitedSet.has(neighbor)) {
           unvisited.push(neighbor);
+          unvisitedSet.add(neighbor);
         }
       }
     }
@@ -129,6 +149,7 @@ function dijkstra<T>(startLeaf: Node<T>, endLeaf: Node<T>, branches: Branch<T>[]
 
 /**
  * Reconstruct path from parent map
+ * Optimized to avoid O(n) unshift() operations by building in reverse
  */
 function reconstructPath<T>(
   parent: Map<Node<T>, Node<T>>,
@@ -138,13 +159,16 @@ function reconstructPath<T>(
   const path: Node<T>[] = [];
   let current: Node<T> | undefined = endLeaf;
 
+  // Build path in reverse order
   while (current !== undefined) {
-    path.unshift(current);
+    path.push(current);
     if (current === startLeaf) {
       break;
     }
     current = parent.get(current);
   }
 
+  // Reverse to get correct order (O(n) but only once)
+  path.reverse();
   return path;
 }

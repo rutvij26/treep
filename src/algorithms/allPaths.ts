@@ -33,8 +33,8 @@ export function allPaths<T>(startLeaf: Node<T>, endLeaf: Node<T>): Node<T>[][] {
     const state = stack[stack.length - 1];
 
     if (state.leaf === endLeaf) {
-      // Found a path
-      paths.push([...state.path]);
+      // Found a path - use slice() for copying (potentially faster than spread)
+      paths.push(state.path.slice());
       stack.pop();
       continue;
     }
@@ -57,7 +57,8 @@ export function allPaths<T>(startLeaf: Node<T>, endLeaf: Node<T>): Node<T>[][] {
     }
 
     // Create new state for next leaf
-    const newPath = [...state.path, nextLeaf];
+    // Use concat for potentially better performance than spread
+    const newPath = state.path.concat(nextLeaf);
     const newVisited = new Set(state.visited);
     newVisited.add(nextLeaf);
 

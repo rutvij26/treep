@@ -153,6 +153,38 @@ describe('Graph', () => {
     });
   });
 
+  describe('iterators', () => {
+    it('should iterate over leaves efficiently', () => {
+      const alice = graph.addLeaf({ name: 'Alice' }, 'alice');
+      const bob = graph.addLeaf({ name: 'Bob' }, 'bob');
+      const charlie = graph.addLeaf({ name: 'Charlie' }, 'charlie');
+
+      const leaves: (typeof alice)[] = [];
+      for (const leaf of graph.leavesIterator()) {
+        leaves.push(leaf);
+      }
+
+      expect(leaves.length).toBe(3);
+      expect(leaves).toContain(alice);
+      expect(leaves).toContain(bob);
+      expect(leaves).toContain(charlie);
+    });
+
+    it('should iterate over branches efficiently', () => {
+      const alice = graph.addLeaf({ name: 'Alice' }, 'alice');
+      const bob = graph.addLeaf({ name: 'Bob' }, 'bob');
+      const branch1 = graph.addBranch(alice, bob);
+
+      const branches: (typeof branch1)[] = [];
+      for (const branch of graph.branchesIterator()) {
+        branches.push(branch);
+      }
+
+      expect(branches.length).toBe(1);
+      expect(branches).toContain(branch1);
+    });
+  });
+
   describe('constructor with data', () => {
     it('should create graph from data array', () => {
       const data = [
@@ -161,6 +193,43 @@ describe('Graph', () => {
       ];
       const newGraph = new Graph(data);
       expect(newGraph.size()).toBe(2);
+    });
+  });
+
+  describe('ID generation failure', () => {
+    it('should throw error when unable to generate unique ID', () => {
+      // Test line 227: throw when ID generation fails after 1000 attempts
+      // This is hard to trigger naturally, but we can mock Date.now to create collisions
+      const originalDateNow = Date.now;
+      let callCount = 0;
+      const mockTimestamp = 1234567890;
+
+      // Mock Date.now to return same value, causing ID collisions
+      Date.now = jest.fn(() => {
+        callCount++;
+        return mockTimestamp;
+      });
+
+      // Fill up the graph with IDs that will collide
+      const testGraph = new Graph();
+      const baseId = `leaf_${mockTimestamp}_`;
+
+      // Add leaves with IDs that will collide with auto-generated ones
+      for (let i = 0; i < 1000; i++) {
+        try {
+          testGraph.addLeaf({ name: `Test${i}` }, `${baseId}${i}`);
+        } catch {
+          // Ignore duplicates
+        }
+      }
+
+      // Now try to add a leaf without ID - it should fail after 1000 attempts
+      expect(() => {
+        testGraph.addLeaf({ name: 'ShouldFail' });
+      }).toThrow(GraphError);
+
+      // Restore Date.now
+      Date.now = originalDateNow;
     });
   });
 });
