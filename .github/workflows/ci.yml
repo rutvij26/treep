@@ -1,4 +1,4 @@
-name: CI
+name: ci
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [main, develop]
 
 jobs:
-  test:
+  ci:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -42,4 +42,3 @@ jobs:
 
       - name: Check bundle size
         run: npm run size
-

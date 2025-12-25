@@ -12,14 +12,14 @@ This document outlines the planned features and improvements for Treep.
 
 ## Upcoming Features
 
-### Phase 1: Tree-Specific Operations
+### Phase 1: Tree-Specific Operations ✅
 
-- [ ] Pre-order, in-order, post-order traversal
-- [ ] Tree root operations
-- [ ] Tree validation (isTree, isBST, isBalanced)
-- [ ] Tree metrics (height, depth, size, width)
-- [ ] Tree node relationships (parent, children, siblings, ancestors, descendants)
-- [ ] Binary Search Tree operations
+- [x] Pre-order, in-order, post-order traversal
+- [x] Tree root operations
+- [x] Tree validation (isTree, isBST, isBalanced)
+- [x] Tree metrics (height, depth, size, width)
+- [x] Tree node relationships (parent, children, siblings, ancestors, descendants)
+- [x] Binary Search Tree operations
 
 ### Phase 2: Enhanced Utilities
 
