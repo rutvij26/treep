@@ -147,6 +147,8 @@ jobs:
 
       - name: Build project
         run: npm run build
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Check bundle size
         run: npm run size
