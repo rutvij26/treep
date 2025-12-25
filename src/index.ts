@@ -9,6 +9,19 @@ export { DFS } from './algorithms/dfs';
 export { shortestPath } from './algorithms/shortestPath';
 export { detectCycles } from './algorithms/cycleDetection';
 export { allPaths } from './algorithms/allPaths';
+export { topologicalSort, isDAG } from './algorithms/topologicalSort';
+export {
+  findConnectedComponents,
+  findStronglyConnectedComponents,
+  countConnectedComponents,
+} from './algorithms/connectedComponents';
+export {
+  findPathsWithConstraints,
+  findShortestPathWithConstraints,
+  findPathsAvoiding,
+  findPathsThrough,
+} from './algorithms/pathFinding';
+export type { PathConstraints } from './algorithms/pathFinding';
 
 // Errors
 export {
@@ -46,6 +59,11 @@ export {
   toAdjacencyList,
   toEdgeList,
   toAdjacencyMatrix,
+  reverseGraph,
+  toUndirected,
+  transpose,
+  filterBranches,
+  filterLeaves,
 } from './utils';
 export type {
   NormalizeOptions,

@@ -11,3 +11,16 @@ export {
   treeTraversal,
   type TraversalOrder,
 } from './treeTraversal';
+export { topologicalSort, isDAG } from './topologicalSort';
+export {
+  findConnectedComponents,
+  findStronglyConnectedComponents,
+  countConnectedComponents,
+} from './connectedComponents';
+export {
+  findPathsWithConstraints,
+  findShortestPathWithConstraints,
+  findPathsAvoiding,
+  findPathsThrough,
+  type PathConstraints,
+} from './pathFinding';

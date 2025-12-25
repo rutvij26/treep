@@ -29,12 +29,12 @@ This document outlines the planned features and improvements for Treep.
 - [x] Subgraph extraction
 - [x] Export formats (DOT, adjacency list, edge list)
 
-### Phase 3: Advanced Algorithms
+### Phase 3: Advanced Algorithms ✅
 
-- [ ] Topological sorting
-- [ ] Connected components
-- [ ] Path finding with constraints
-- [ ] Graph transformations (reverse, transpose, undirected)
+- [x] Topological sorting
+- [x] Connected components
+- [x] Path finding with constraints
+- [x] Graph transformations (reverse, transpose, undirected)
 
 ### Phase 4: Performance & Optimization
 
