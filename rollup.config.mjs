@@ -46,6 +46,7 @@ export default [
         declaration: true,
         declarationDir: './dist/cjs',
         rootDir: './src',
+        module: 'esnext', // Override for Rollup compatibility
       }),
       codecovRollupPlugin({
         enableBundleAnalysis: process.env.CODECOV_TOKEN !== undefined,
