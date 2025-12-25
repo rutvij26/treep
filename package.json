@@ -27,7 +27,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rutvij26/treep.git"
+    "url": "git+https://github.com/rutvij26/treep.git"
   },
   "homepage": "https://github.com/rutvij26/treep",
   "bugs": {
