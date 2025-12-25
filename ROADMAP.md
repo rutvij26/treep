@@ -21,13 +21,13 @@ This document outlines the planned features and improvements for Treep.
 - [x] Tree node relationships (parent, children, siblings, ancestors, descendants)
 - [x] Binary Search Tree operations
 
-### Phase 2: Enhanced Utilities
+### Phase 2: Enhanced Utilities ✅
 
-- [ ] Graph serialization (toJSON)
-- [ ] Graph statistics and metrics
-- [ ] Query and filter methods
-- [ ] Subgraph extraction
-- [ ] Export formats (DOT, adjacency list, edge list)
+- [x] Graph serialization (toJSON)
+- [x] Graph statistics and metrics
+- [x] Query and filter methods
+- [x] Subgraph extraction
+- [x] Export formats (DOT, adjacency list, edge list)
 
 ### Phase 3: Advanced Algorithms
 
@@ -42,6 +42,10 @@ This document outlines the planned features and improvements for Treep.
 - [ ] Memory optimization for very large graphs
 - [ ] Lazy evaluation for large result sets
 - [ ] Streaming support for huge JSON files
+
+### Phase 5: Documentation
+- [] Github Pages
+- [] Documentation
 
 ## Long-term Goals
 

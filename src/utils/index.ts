@@ -29,3 +29,18 @@ export {
   bstDelete,
   type CompareFn,
 } from './binarySearchTree';
+export { toJSON, toJSONString, type ToJSONOptions, type SerializedGraph } from './serialization';
+export { getStatistics, type GraphStatistics } from './statistics';
+export {
+  findLeaves,
+  findLeaf,
+  findBranches,
+  findBranch,
+  filterLeavesByValue,
+  filterBranchesByWeight,
+  type LeafPredicate,
+  type BranchPredicate,
+  type QueryLeavesOptions,
+} from './query';
+export { extractSubgraph, extractReachableSubgraph, type SubgraphOptions } from './subgraph';
+export { toDOT, toAdjacencyList, toEdgeList, toAdjacencyMatrix } from './export';
