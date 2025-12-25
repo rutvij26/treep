@@ -54,7 +54,7 @@ describe('validate - Edge Cases', () => {
     };
     const result = validate({ user: { name: 'Alice' } }, schema);
     expect(result.isValid).toBe(false);
-    expect(result.errors.some((e) => e.path.includes('user.age'))).toBe(true);
+    expect(result.errors.some(e => e.path.includes('user.age'))).toBe(true);
   });
 
   it('should handle custom validator returning string', () => {
@@ -106,4 +106,3 @@ describe('validate - Edge Cases', () => {
     expect(result.isValid).toBe(false);
   });
 });
-

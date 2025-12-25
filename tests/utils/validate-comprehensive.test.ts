@@ -184,7 +184,7 @@ describe('validate - Comprehensive', () => {
         value: {
           type: 'number',
           required: true,
-          validator: (v) => (v as number) > 0 || 'Value must be positive',
+          validator: v => (v as number) > 0 || 'Value must be positive',
         },
       };
       const result = validate({ value: 10 }, schema);
@@ -196,7 +196,7 @@ describe('validate - Comprehensive', () => {
         value: {
           type: 'number',
           required: true,
-          validator: (v) => (v as number) > 0 || 'Value must be positive',
+          validator: v => (v as number) > 0 || 'Value must be positive',
         },
       };
       const result = validate({ value: -5 }, schema);
@@ -279,4 +279,3 @@ describe('validate - Comprehensive', () => {
     });
   });
 });
-

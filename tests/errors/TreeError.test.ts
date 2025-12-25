@@ -13,4 +13,3 @@ describe('TreeError', () => {
     expect(error.code).toBe('TREE_ERROR');
   });
 });
-

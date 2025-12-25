@@ -52,4 +52,3 @@ describe('normalize', () => {
     expect(normalize(undefined)).toBeUndefined();
   });
 });
-

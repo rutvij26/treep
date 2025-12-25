@@ -57,4 +57,3 @@ describe('normalize - Comprehensive', () => {
     ).toBe('test');
   });
 });
-

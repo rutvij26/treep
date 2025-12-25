@@ -35,4 +35,3 @@ describe('detectCycles', () => {
     expect(detectCycles(a)).toBe(false);
   });
 });
-

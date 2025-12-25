@@ -42,4 +42,3 @@ describe('allPaths', () => {
     expect(paths).toEqual([]);
   });
 });
-

@@ -41,4 +41,3 @@ describe('ValidationError', () => {
     expect(userErrors).toHaveLength(3);
   });
 });
-

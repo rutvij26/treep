@@ -13,4 +13,3 @@ describe('TypeError', () => {
     expect(error.code).toBe('TYPE_ERROR');
   });
 });
-

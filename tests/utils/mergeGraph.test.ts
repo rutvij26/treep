@@ -67,4 +67,3 @@ describe('mergeGraph', () => {
     expect(graph1.branchCount()).toBeGreaterThan(0);
   });
 });
-

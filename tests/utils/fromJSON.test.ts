@@ -48,4 +48,3 @@ describe('fromJSON', () => {
     }).toThrow();
   });
 });
-

@@ -14,7 +14,7 @@ describe('DFS', () => {
     graph.addBranch(b, d);
 
     const visited = DFS(a);
-    const names = visited.map((leaf) => leaf.value.name);
+    const names = visited.map(leaf => leaf.value.name);
 
     expect(names[0]).toBe('A');
     expect(names).toContain('B');
@@ -30,7 +30,7 @@ describe('DFS', () => {
     graph.addBranch(a, b);
 
     const visited: string[] = [];
-    DFS(a, (leaf) => {
+    DFS(a, leaf => {
       visited.push(leaf.value.name);
     });
 
@@ -47,4 +47,3 @@ describe('DFS', () => {
     expect(visited[0].value.name).toBe('A');
   });
 });
-

@@ -56,4 +56,3 @@ describe('renderASCII', () => {
     expect(result).not.toContain('C');
   });
 });
-
