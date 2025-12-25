@@ -44,3 +44,10 @@ export {
 } from './query';
 export { extractSubgraph, extractReachableSubgraph, type SubgraphOptions } from './subgraph';
 export { toDOT, toAdjacencyList, toEdgeList, toAdjacencyMatrix } from './export';
+export {
+  reverseGraph,
+  toUndirected,
+  transpose,
+  filterBranches,
+  filterLeaves,
+} from './transformations';
