@@ -9,6 +9,11 @@ import { GraphError } from '../errors/GraphError';
 export class Graph<T> {
   private leavesMap: Map<string | number, Node<T>>;
   private branchesSet: Set<Branch<T>>;
+  // Cached arrays to avoid Array.from() overhead
+  private _leaves: Node<T>[] = [];
+  private _branches: Branch<T>[] = [];
+  private _leavesDirty = true;
+  private _branchesDirty = true;
 
   constructor(data?: Array<{ id: string | number; value: T }>) {
     this.leavesMap = new Map();
@@ -38,6 +43,7 @@ export class Graph<T> {
 
     const leaf = new Node(id, value);
     this.leavesMap.set(id, leaf);
+    this._leavesDirty = true;
     return leaf;
   }
 
@@ -68,6 +74,7 @@ export class Graph<T> {
     const branch = new Branch(from, to, weight);
     this.branchesSet.add(branch);
     from.addBranch(branch);
+    this._branchesDirty = true;
 
     return branch;
   }
@@ -94,6 +101,7 @@ export class Graph<T> {
     }
 
     this.leavesMap.delete(leaf.id);
+    this._leavesDirty = true;
   }
 
   /**
@@ -103,6 +111,7 @@ export class Graph<T> {
     if (this.branchesSet.has(branch)) {
       this.branchesSet.delete(branch);
       branch.from.removeBranch(branch);
+      this._branchesDirty = true;
     }
   }
 
@@ -115,16 +124,44 @@ export class Graph<T> {
 
   /**
    * Get all leaves in the graph
+   * Uses cached array for performance
    */
   leaves(): Node<T>[] {
-    return Array.from(this.leavesMap.values());
+    if (this._leavesDirty) {
+      this._leaves = Array.from(this.leavesMap.values());
+      this._leavesDirty = false;
+    }
+    return this._leaves;
+  }
+
+  /**
+   * Get all leaves as an iterator (memory efficient for large graphs)
+   */
+  *leavesIterator(): Generator<Node<T>, void, unknown> {
+    for (const leaf of this.leavesMap.values()) {
+      yield leaf;
+    }
   }
 
   /**
    * Get all branches in the graph
+   * Uses cached array for performance
    */
   branches(): Branch<T>[] {
-    return Array.from(this.branchesSet.values());
+    if (this._branchesDirty) {
+      this._branches = Array.from(this.branchesSet.values());
+      this._branchesDirty = false;
+    }
+    return this._branches;
+  }
+
+  /**
+   * Get all branches as an iterator (memory efficient for large graphs)
+   */
+  *branchesIterator(): Generator<Branch<T>, void, unknown> {
+    for (const branch of this.branchesSet.values()) {
+      yield branch;
+    }
   }
 
   /**
@@ -136,9 +173,11 @@ export class Graph<T> {
 
   /**
    * Check if a branch exists in the graph
+   * Optimized: checks from node's branches directly instead of iterating all branches
    */
   hasBranch(from: Node<T>, to: Node<T>): boolean {
-    return Array.from(this.branchesSet).some(branch => branch.from === from && branch.to === to);
+    // Check if from node has a branch to to node - O(degree) instead of O(E)
+    return from.branches.some(branch => branch.to === to && this.branchesSet.has(branch));
   }
 
   /**
@@ -168,6 +207,10 @@ export class Graph<T> {
   clear(): void {
     this.leavesMap.clear();
     this.branchesSet.clear();
+    this._leaves = [];
+    this._branches = [];
+    this._leavesDirty = true;
+    this._branchesDirty = true;
   }
 
   /**

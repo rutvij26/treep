@@ -112,9 +112,10 @@ export function extractReachableSubgraph<T>(
   const toVisit: Array<{ leaf: Node<T>; depth: number }> = [{ leaf: startLeaf, depth: 0 }];
   const leafIds: Array<string | number> = [];
 
-  // BFS to find all reachable leaves
-  while (toVisit.length > 0) {
-    const { leaf, depth } = toVisit.shift()!;
+  // BFS to find all reachable leaves - optimized with index-based queue
+  let queueIndex = 0;
+  while (queueIndex < toVisit.length) {
+    const { leaf, depth } = toVisit[queueIndex++];
 
     if (visited.has(leaf)) {
       continue;
@@ -127,9 +128,9 @@ export function extractReachableSubgraph<T>(
     visited.add(leaf);
     leafIds.push(leaf.id);
 
-    // Add neighbors
-    for (const branch of graph.branches()) {
-      if (branch.from === leaf && !visited.has(branch.to)) {
+    // Add neighbors - only check current node's branches
+    for (const branch of leaf.branches) {
+      if (!visited.has(branch.to)) {
         toVisit.push({ leaf: branch.to, depth: depth + 1 });
       }
     }

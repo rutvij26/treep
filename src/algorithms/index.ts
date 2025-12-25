@@ -24,3 +24,4 @@ export {
   findPathsThrough,
   type PathConstraints,
 } from './pathFinding';
+export { lazyBFS, lazyDFS, lazyFindPaths, lazyAllPaths, lazyFindLeaves } from './lazy';

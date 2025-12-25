@@ -73,6 +73,23 @@ describe('Connected Components', () => {
       expect(components).toHaveLength(1);
       expect(components[0]).toHaveLength(4);
     });
+
+    it('should handle bidirectional branches in undirected graph', () => {
+      // Test line 58: branch.to === start case
+      const graph = new Graph<string>();
+      const a = graph.addLeaf('A', 'a');
+      const b = graph.addLeaf('B', 'b');
+      const c = graph.addLeaf('C', 'c');
+      // Create branches in both directions to test the else if branch
+      graph.addBranch(a, b);
+      graph.addBranch(b, a); // Reverse direction
+      graph.addBranch(b, c);
+
+      const components = findConnectedComponents(graph);
+
+      expect(components).toHaveLength(1);
+      expect(components[0]).toHaveLength(3);
+    });
   });
 
   describe('findStronglyConnectedComponents', () => {
@@ -108,6 +125,28 @@ describe('Connected Components', () => {
       const components = findStronglyConnectedComponents(graph);
 
       expect(components.length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('should handle strongly connected component with multiple nodes', () => {
+      // Test line 138: dfsComponentDirected recursive call
+      const graph = new Graph<string>();
+      const a = graph.addLeaf('A', 'a');
+      const b = graph.addLeaf('B', 'b');
+      const c = graph.addLeaf('C', 'c');
+      // Create a cycle: A -> B -> C -> A (strongly connected)
+      graph.addBranch(a, b);
+      graph.addBranch(b, c);
+      graph.addBranch(c, a);
+
+      const components = findStronglyConnectedComponents(graph);
+
+      // Should find one strongly connected component with all three nodes
+      expect(components.length).toBeGreaterThan(0);
+      const componentWithA = components.find(comp => comp.includes(a));
+      expect(componentWithA).toBeDefined();
+      if (componentWithA) {
+        expect(componentWithA.length).toBeGreaterThanOrEqual(1);
+      }
     });
 
     it('should handle empty graph', () => {

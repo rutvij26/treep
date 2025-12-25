@@ -46,4 +46,29 @@ describe('DFS', () => {
     expect(visited).toHaveLength(1);
     expect(visited[0].value.name).toBe('A');
   });
+
+  it('should skip already visited nodes when popped from stack', () => {
+    // Create a graph where a node can be reached via multiple paths
+    // This tests the defensive check at line 18-19
+    const graph = new Graph<{ name: string }>();
+    const a = graph.addLeaf({ name: 'A' }, 'a');
+    const b = graph.addLeaf({ name: 'B' }, 'b');
+    const c = graph.addLeaf({ name: 'C' }, 'c');
+    const d = graph.addLeaf({ name: 'D' }, 'd');
+
+    // A -> B, A -> C, B -> D, C -> D
+    // D can be reached via both B and C
+    graph.addBranch(a, b);
+    graph.addBranch(a, c);
+    graph.addBranch(b, d);
+    graph.addBranch(c, d);
+    graph.addBranch(d, b); // Creates cycle back to B
+
+    const visited = DFS(a);
+    const names = visited.map(leaf => leaf.value.name);
+
+    // Should visit each node only once despite multiple paths
+    expect(names.length).toBe(4);
+    expect(new Set(names).size).toBe(4); // All unique
+  });
 });
