@@ -185,12 +185,15 @@ jobs:
           echo "${{ needs.prepare-release.outputs.changelog }}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Set tag for tag push
-        id: tag_push
+      - name: Checkout for tag push
         if: github.event_name == 'push'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Set tag for tag push
+        id: tag_push
+        if: github.event_name == 'push'
         run: |
           TAG="${{ github.ref_name }}"
           LATEST_TAG=$(git describe --tags --abbrev=0 ${TAG}^ 2>/dev/null || echo "")
