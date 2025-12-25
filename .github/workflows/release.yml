@@ -171,7 +171,7 @@ jobs:
   release:
     needs: [prepare-release]
     runs-on: ubuntu-latest
-    if: always() && (github.event_name == 'push' || needs.prepare-release.result == 'success')
+    if: always() && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && needs.prepare-release.result == 'success'))
     permissions:
       contents: write
       id-token: write
