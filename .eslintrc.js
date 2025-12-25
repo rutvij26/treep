@@ -3,7 +3,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: './tsconfig.eslint.json',
   },
   extends: [
     'eslint:recommended',
@@ -23,5 +23,5 @@ module.exports = {
     node: true,
     es2020: true,
   },
+  ignorePatterns: ['.eslintrc.js', 'jest.config.js', 'rollup.config.mjs'],
 };
-
