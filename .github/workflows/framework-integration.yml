@@ -140,10 +140,10 @@ jobs:
         run: |
           mkdir -p .test-react
           cd .test-react
-          npx create-react-app . --template typescript --skip-git
+          npx create-react-app@latest . --template typescript --skip-git
           npm install treep@latest
 
-      - name: Create React test
+      - name: Create React test component
         working-directory: .test-react/src
         run: |
           cat > TreepTest.tsx <<'EOF'
@@ -165,9 +165,24 @@ jobs:
           };
           EOF
 
-      - name: Build React app
+      - name: Create React test file
+        working-directory: .test-react/src
+        run: |
+          cat > TreepTest.test.tsx <<'EOF'
+          import { render } from '@testing-library/react';
+          import { TreepTest } from './TreepTest';
+
+          test('treep works in React', () => {
+            const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+            render(<TreepTest />);
+            expect(consoleSpy).toHaveBeenCalledWith('✅ React integration test passed');
+            consoleSpy.mockRestore();
+          });
+          EOF
+
+      - name: Run React tests
         working-directory: .test-react
-        run: npm run build
+        run: npm test -- --watchAll=false --passWithNoTests
 
       - name: Cleanup
         if: always()
@@ -191,7 +206,7 @@ jobs:
           npm install
           npm install treep@latest
 
-      - name: Create Vue test
+      - name: Create Vue test component
         working-directory: .test-vue/src/components
         run: |
           cat > TreepTest.vue <<'EOF'
@@ -215,9 +230,27 @@ jobs:
           </template>
           EOF
 
-      - name: Build Vue app
+      - name: Create Vue test file
         working-directory: .test-vue
-        run: npm run build
+        run: |
+          cat > src/components/TreepTest.spec.ts <<'EOF'
+          import { mount } from '@vue/test-utils';
+          import TreepTest from './TreepTest.vue';
+          import { describe, it, expect, vi } from 'vitest';
+
+          describe('TreepTest', () => {
+            it('treep works in Vue', () => {
+              const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+              mount(TreepTest);
+              expect(consoleSpy).toHaveBeenCalledWith('✅ Vue integration test passed');
+              consoleSpy.mockRestore();
+            });
+          });
+          EOF
+
+      - name: Run Vue tests
+        working-directory: .test-vue
+        run: npm run test:unit
 
       - name: Cleanup
         if: always()
@@ -266,9 +299,39 @@ jobs:
           }
           EOF
 
-      - name: Build Angular app
+      - name: Create Angular test file
+        working-directory: .test-angular/src/app
+        run: |
+          cat > treep-test.component.spec.ts <<'EOF'
+          import { ComponentFixture, TestBed } from '@angular/core/testing';
+          import { TreepTestComponent } from './treep-test.component';
+
+          describe('TreepTestComponent', () => {
+            let component: TreepTestComponent;
+            let fixture: ComponentFixture<TreepTestComponent>;
+
+            beforeEach(async () => {
+              await TestBed.configureTestingModule({
+                declarations: [TreepTestComponent]
+              }).compileComponents();
+            });
+
+            beforeEach(() => {
+              fixture = TestBed.createComponent(TreepTestComponent);
+              component = fixture.componentInstance;
+            });
+
+            it('treep works in Angular', () => {
+              const consoleSpy = spyOn(console, 'log');
+              fixture.detectChanges();
+              expect(consoleSpy).toHaveBeenCalledWith('✅ Angular integration test passed');
+            });
+          });
+          EOF
+
+      - name: Run Angular tests
         working-directory: .test-angular
-        run: npm run build
+        run: npm test -- --watch=false --browsers=ChromeHeadless
 
       - name: Cleanup
         if: always()
