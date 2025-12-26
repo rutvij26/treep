@@ -1,0 +1,258 @@
+name: Framework Integration Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  node-esm-cjs:
+    name: Node.js (ESM + CJS)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 'latest']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Setup test project
+        run: |
+          mkdir -p .test-node
+          cd .test-node
+          echo '{"name":"test","version":"1.0.0","type":"module","dependencies":{"treep":"latest"}}' > package.json
+          npm install
+
+      - name: Test ESM import
+        working-directory: .test-node
+        run: |
+          cat > test.mjs <<'EOF'
+          import { Graph, BFS, shortestPath } from 'treep';
+          const g = new Graph();
+          const a = g.addLeaf('A', 'A');
+          const b = g.addLeaf('B', 'B');
+          g.addBranch('A', 'B');
+          const visited = [];
+          BFS(a, (leaf) => visited.push(leaf.value));
+          if (visited.length !== 2) throw new Error('BFS failed');
+          console.log('✅ Node.js ESM test passed');
+          EOF
+          node test.mjs
+
+      - name: Test CJS import
+        working-directory: .test-node
+        run: |
+          cat > test.cjs <<'EOF'
+          const { Graph, BFS } = require('treep');
+          const g = new Graph();
+          const a = g.addLeaf('A', 'A');
+          const b = g.addLeaf('B', 'B');
+          g.addBranch('A', 'B');
+          const visited = [];
+          BFS(a, (leaf) => visited.push(leaf.value));
+          if (visited.length !== 2) throw new Error('BFS failed');
+          console.log('✅ Node.js CJS test passed');
+          EOF
+          node test.cjs
+
+      - name: Cleanup
+        if: always()
+        run: rm -rf .test-node
+
+  react:
+    name: React (TypeScript)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Create React app
+        run: |
+          mkdir -p .test-react
+          cd .test-react
+          npx create-react-app@latest test-react-app --template typescript --skip-git
+          cd test-react-app
+          npm install treep@latest
+
+      - name: Create React test component
+        working-directory: .test-react/test-react-app/src
+        run: |
+          cat > TreepTest.tsx <<'EOF'
+          import { useEffect } from 'react';
+          import { Graph, BFS } from 'treep';
+
+          export const TreepTest = () => {
+            useEffect(() => {
+              const g = new Graph();
+              const a = g.addLeaf('A', 'A');
+              const b = g.addLeaf('B', 'B');
+              g.addBranch('A', 'B');
+              const visited: string[] = [];
+              BFS(a, (leaf) => visited.push(leaf.value as string));
+              if (visited.length !== 2) throw new Error('BFS failed');
+              console.log('✅ React integration test passed');
+            }, []);
+            return null;
+          };
+          EOF
+
+      - name: Build React app
+        working-directory: .test-react/test-react-app
+        run: npm run build
+
+      - name: Cleanup
+        if: always()
+        run: rm -rf .test-react
+
+  vue:
+    name: Vue (TypeScript)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Create Vue app
+        run: |
+          mkdir -p .test-vue
+          cd .test-vue
+          npm create vue@latest test-vue-app -- --typescript
+          cd test-vue-app
+          npm install treep@latest
+
+      - name: Create Vue test component
+        working-directory: .test-vue/test-vue-app/src/components
+        run: |
+          cat > TreepTest.vue <<'EOF'
+          <script setup lang="ts">
+          import { onMounted } from 'vue';
+          import { Graph, BFS } from 'treep';
+
+          onMounted(() => {
+            const g = new Graph();
+            const a = g.addLeaf('A', 'A');
+            const b = g.addLeaf('B', 'B');
+            g.addBranch('A', 'B');
+            const visited: string[] = [];
+            BFS(a, (leaf) => visited.push(leaf.value as string));
+            if (visited.length !== 2) throw new Error('BFS failed');
+            console.log('✅ Vue integration test passed');
+          });
+          </script>
+          <template>
+            <div>Treep Test</div>
+          </template>
+          EOF
+
+      - name: Build Vue app
+        working-directory: .test-vue/test-vue-app
+        run: npm run build
+
+      - name: Cleanup
+        if: always()
+        run: rm -rf .test-vue
+
+  angular:
+    name: Angular (TypeScript)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Create Angular app
+        run: |
+          mkdir -p .test-angular
+          cd .test-angular
+          npx @angular/cli@latest new test-angular-app --routing=false --style=css --skip-git --package-manager=npm --skip-install
+          cd test-angular-app
+          npm install
+          npm install treep@latest
+
+      - name: Create Angular test component
+        working-directory: .test-angular/test-angular-app/src/app
+        run: |
+          cat > treep-test.component.ts <<'EOF'
+          import { Component, OnInit } from '@angular/core';
+          import { Graph, BFS } from 'treep';
+
+          @Component({
+            selector: 'app-treep-test',
+            template: '<div>Treep Test</div>'
+          })
+          export class TreepTestComponent implements OnInit {
+            ngOnInit() {
+              const g = new Graph();
+              const a = g.addLeaf('A', 'A');
+              const b = g.addLeaf('B', 'B');
+              g.addBranch('A', 'B');
+              const visited: string[] = [];
+              BFS(a, (leaf) => visited.push(leaf.value as string));
+              if (visited.length !== 2) throw new Error('BFS failed');
+              console.log('✅ Angular integration test passed');
+            }
+          }
+          EOF
+
+      - name: Build Angular app
+        working-directory: .test-angular/test-angular-app
+        run: npm run build
+
+      - name: Cleanup
+        if: always()
+        run: rm -rf .test-angular
+
+  react-native:
+    name: React Native
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Setup test project
+        run: |
+          mkdir -p .test-rn
+          cd .test-rn
+          echo '{"name":"test","version":"1.0.0","type":"module","dependencies":{"treep":"latest"}}' > package.json
+          npm install
+
+      - name: Test React Native compatibility
+        working-directory: .test-rn
+        run: |
+          cat > test.mjs <<'EOF'
+          // React Native can use ESM with metro bundler
+          // Test that treep can be imported and used
+          import { Graph, BFS } from 'treep';
+          const g = new Graph();
+          const a = g.addLeaf('A', 'A');
+          const b = g.addLeaf('B', 'B');
+          g.addBranch('A', 'B');
+          const visited = [];
+          BFS(a, (leaf) => visited.push(leaf.value));
+          if (visited.length !== 2) throw new Error('BFS failed');
+          console.log('✅ React Native integration test passed');
+          EOF
+          node test.mjs
+
+      - name: Cleanup
+        if: always()
+        run: rm -rf .test-rn

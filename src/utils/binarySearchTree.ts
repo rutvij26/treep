@@ -27,7 +27,10 @@ export function bstInsert<T>(
   compareFn?: CompareFn<T>
 ): Node<T> {
   const compare = compareFn || defaultCompare;
-  const newNode = graph.addLeaf(value);
+  // Use auto-generated ID to avoid conflicts when value is used as ID
+  // We'll check for duplicates in the BST, not by ID
+  const tempId = graph.generateId();
+  const newNode = graph.addLeaf(value, tempId);
 
   let current: Node<T> | null = root;
 
