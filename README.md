@@ -56,7 +56,7 @@ const path = shortestPath(alice, charlie);
 
 ## Documentation
 
-📚 **[View Full Documentation](./docs/index.html)** - Comprehensive guide with examples, API reference, and interactive code snippets.
+📚 **[View Full Documentation](https://rutvij26.github.io/treep/)** - Comprehensive guide with examples, API reference, and interactive code snippets.
 
 See [examples](./examples/) for more usage examples.
 
