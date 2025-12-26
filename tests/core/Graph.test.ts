@@ -275,6 +275,7 @@ describe('Graph', () => {
       // Test line 227: throw when ID generation fails after 1000 attempts
       // This is hard to trigger naturally, but we can mock Date.now to create collisions
       const originalDateNow = Date.now;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       let callCount = 0;
       const mockTimestamp = 1234567890;
 
