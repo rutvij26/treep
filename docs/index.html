@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treep - Graph & Tree Library Documentation</title>
+  <meta name="description" content="Comprehensive documentation for Treep - a lightweight, ultra-fast TypeScript library for graph and tree data structures">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <a href="index.html" class="logo-link">
+          <h1>🌳 Treep</h1>
+        </a>
+        <div class="version-selector">
+          <select id="versionSelect" class="version-select">
+            <option value="latest">v1.3.0 (latest)</option>
+            <option value="1.3.0">v1.3.0</option>
+            <option value="1.2.0">v1.2.0</option>
+            <option value="1.1.0">v1.1.0</option>
+            <option value="1.0.0">v1.0.0</option>
+          </select>
+        </div>
+      </div>
+      <nav class="top-nav">
+        <a href="index.html#getting-started">Getting Started</a>
+        <a href="index.html#examples">Examples</a>
+        <a href="https://github.com/rutvij26/treep" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <input type="text" id="sidebarSearch" placeholder="Search API..." class="sidebar-search">
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-category">
+          <button class="nav-category-toggle" data-category="core">
+            <span>Core Classes</span>
+            <span class="toggle-icon">▼</span>
+          </button>
+          <div class="nav-items" data-category="core">
+            <a href="#Graph" class="nav-item" data-api="Graph">Graph</a>
+            <a href="#Node" class="nav-item" data-api="Node">Node</a>
+            <a href="#Branch" class="nav-item" data-api="Branch">Branch</a>
+          </div>
+        </div>
+
+        <div class="nav-category">
+          <button class="nav-category-toggle" data-category="algorithms">
+            <span>Algorithms</span>
+            <span class="toggle-icon">▼</span>
+          </button>
+          <div class="nav-items" data-category="algorithms">
+            <a href="#BFS" class="nav-item" data-api="BFS">BFS</a>
+            <a href="#DFS" class="nav-item" data-api="DFS">DFS</a>
+            <a href="#shortestPath" class="nav-item" data-api="shortestPath">shortestPath</a>
+            <a href="#allPaths" class="nav-item" data-api="allPaths">allPaths</a>
+            <a href="#detectCycles" class="nav-item" data-api="detectCycles">detectCycles</a>
+            <a href="#topologicalSort" class="nav-item" data-api="topologicalSort">topologicalSort</a>
+            <a href="#isDAG" class="nav-item" data-api="isDAG">isDAG</a>
+            <a href="#findConnectedComponents" class="nav-item" data-api="findConnectedComponents">findConnectedComponents</a>
+            <a href="#findStronglyConnectedComponents" class="nav-item" data-api="findStronglyConnectedComponents">findStronglyConnectedComponents</a>
+            <a href="#countConnectedComponents" class="nav-item" data-api="countConnectedComponents">countConnectedComponents</a>
+            <a href="#findPathsWithConstraints" class="nav-item" data-api="findPathsWithConstraints">findPathsWithConstraints</a>
+            <a href="#findShortestPathWithConstraints" class="nav-item" data-api="findShortestPathWithConstraints">findShortestPathWithConstraints</a>
+            <a href="#findPathsAvoiding" class="nav-item" data-api="findPathsAvoiding">findPathsAvoiding</a>
+            <a href="#findPathsThrough" class="nav-item" data-api="findPathsThrough">findPathsThrough</a>
+            <a href="#lazyBFS" class="nav-item" data-api="lazyBFS">lazyBFS</a>
+            <a href="#lazyDFS" class="nav-item" data-api="lazyDFS">lazyDFS</a>
+            <a href="#lazyFindPaths" class="nav-item" data-api="lazyFindPaths">lazyFindPaths</a>
+            <a href="#lazyAllPaths" class="nav-item" data-api="lazyAllPaths">lazyAllPaths</a>
+            <a href="#lazyFindLeaves" class="nav-item" data-api="lazyFindLeaves">lazyFindLeaves</a>
+            <a href="#preOrder" class="nav-item" data-api="preOrder">preOrder</a>
+            <a href="#inOrder" class="nav-item" data-api="inOrder">inOrder</a>
+            <a href="#postOrder" class="nav-item" data-api="postOrder">postOrder</a>
+            <a href="#levelOrder" class="nav-item" data-api="levelOrder">levelOrder</a>
+            <a href="#treeTraversal" class="nav-item" data-api="treeTraversal">treeTraversal</a>
+          </div>
+        </div>
+
+        <div class="nav-category">
+          <button class="nav-category-toggle" data-category="utilities">
+            <span>Utilities</span>
+            <span class="toggle-icon">▼</span>
+          </button>
+          <div class="nav-items" data-category="utilities">
+            <a href="#toJSON" class="nav-item" data-api="toJSON">toJSON</a>
+            <a href="#toJSONString" class="nav-item" data-api="toJSONString">toJSONString</a>
+            <a href="#fromJSON" class="nav-item" data-api="fromJSON">fromJSON</a>
+            <a href="#fromJSONStream" class="nav-item" data-api="fromJSONStream">fromJSONStream</a>
+            <a href="#toJSONStream" class="nav-item" data-api="toJSONStream">toJSONStream</a>
+            <a href="#toAsyncStream" class="nav-item" data-api="toAsyncStream">toAsyncStream</a>
+            <a href="#getStatistics" class="nav-item" data-api="getStatistics">getStatistics</a>
+            <a href="#findLeaves" class="nav-item" data-api="findLeaves">findLeaves</a>
+            <a href="#findLeaf" class="nav-item" data-api="findLeaf">findLeaf</a>
+            <a href="#findBranches" class="nav-item" data-api="findBranches">findBranches</a>
+            <a href="#findBranch" class="nav-item" data-api="findBranch">findBranch</a>
+            <a href="#filterLeaves" class="nav-item" data-api="filterLeaves">filterLeaves</a>
+            <a href="#filterLeavesByValue" class="nav-item" data-api="filterLeavesByValue">filterLeavesByValue</a>
+            <a href="#filterBranches" class="nav-item" data-api="filterBranches">filterBranches</a>
+            <a href="#filterBranchesByWeight" class="nav-item" data-api="filterBranchesByWeight">filterBranchesByWeight</a>
+            <a href="#extractSubgraph" class="nav-item" data-api="extractSubgraph">extractSubgraph</a>
+            <a href="#extractReachableSubgraph" class="nav-item" data-api="extractReachableSubgraph">extractReachableSubgraph</a>
+            <a href="#toDOT" class="nav-item" data-api="toDOT">toDOT</a>
+            <a href="#toAdjacencyList" class="nav-item" data-api="toAdjacencyList">toAdjacencyList</a>
+            <a href="#toEdgeList" class="nav-item" data-api="toEdgeList">toEdgeList</a>
+            <a href="#toAdjacencyMatrix" class="nav-item" data-api="toAdjacencyMatrix">toAdjacencyMatrix</a>
+            <a href="#reverseGraph" class="nav-item" data-api="reverseGraph">reverseGraph</a>
+            <a href="#transpose" class="nav-item" data-api="transpose">transpose</a>
+            <a href="#toUndirected" class="nav-item" data-api="toUndirected">toUndirected</a>
+            <a href="#normalize" class="nav-item" data-api="normalize">normalize</a>
+            <a href="#mergeGraph" class="nav-item" data-api="mergeGraph">mergeGraph</a>
+            <a href="#renderASCII" class="nav-item" data-api="renderASCII">renderASCII</a>
+            <a href="#validate" class="nav-item" data-api="validate">validate</a>
+            <a href="#validateLeaf" class="nav-item" data-api="validateLeaf">validateLeaf</a>
+            <a href="#validateBranch" class="nav-item" data-api="validateBranch">validateBranch</a>
+            <a href="#validateGraph" class="nav-item" data-api="validateGraph">validateGraph</a>
+            <a href="#validateTree" class="nav-item" data-api="validateTree">validateTree</a>
+            <a href="#findRoot" class="nav-item" data-api="findRoot">findRoot</a>
+            <a href="#isRoot" class="nav-item" data-api="isRoot">isRoot</a>
+            <a href="#getRoot" class="nav-item" data-api="getRoot">getRoot</a>
+            <a href="#getParent" class="nav-item" data-api="getParent">getParent</a>
+            <a href="#getChildren" class="nav-item" data-api="getChildren">getChildren</a>
+            <a href="#getSiblings" class="nav-item" data-api="getSiblings">getSiblings</a>
+            <a href="#getAncestors" class="nav-item" data-api="getAncestors">getAncestors</a>
+            <a href="#getDescendants" class="nav-item" data-api="getDescendants">getDescendants</a>
+            <a href="#getHeight" class="nav-item" data-api="getHeight">getHeight</a>
+            <a href="#getDepth" class="nav-item" data-api="getDepth">getDepth</a>
+            <a href="#getTreeSize" class="nav-item" data-api="getTreeSize">getTreeSize</a>
+            <a href="#getWidth" class="nav-item" data-api="getWidth">getWidth</a>
+            <a href="#isTree" class="nav-item" data-api="isTree">isTree</a>
+            <a href="#isBST" class="nav-item" data-api="isBST">isBST</a>
+            <a href="#isBalanced" class="nav-item" data-api="isBalanced">isBalanced</a>
+            <a href="#isComplete" class="nav-item" data-api="isComplete">isComplete</a>
+            <a href="#isFull" class="nav-item" data-api="isFull">isFull</a>
+            <a href="#isPerfect" class="nav-item" data-api="isPerfect">isPerfect</a>
+            <a href="#bstInsert" class="nav-item" data-api="bstInsert">bstInsert</a>
+            <a href="#bstSearch" class="nav-item" data-api="bstSearch">bstSearch</a>
+            <a href="#bstMin" class="nav-item" data-api="bstMin">bstMin</a>
+            <a href="#bstMax" class="nav-item" data-api="bstMax">bstMax</a>
+            <a href="#bstSuccessor" class="nav-item" data-api="bstSuccessor">bstSuccessor</a>
+            <a href="#bstPredecessor" class="nav-item" data-api="bstPredecessor">bstPredecessor</a>
+            <a href="#bstDelete" class="nav-item" data-api="bstDelete">bstDelete</a>
+          </div>
+        </div>
+
+        <div class="nav-category">
+          <button class="nav-category-toggle" data-category="errors">
+            <span>Error Classes</span>
+            <span class="toggle-icon">▼</span>
+          </button>
+          <div class="nav-items" data-category="errors">
+            <a href="#TreepError" class="nav-item" data-api="TreepError">TreepError</a>
+            <a href="#GraphError" class="nav-item" data-api="GraphError">GraphError</a>
+            <a href="#TreeError" class="nav-item" data-api="TreeError">TreeError</a>
+            <a href="#ValidationError" class="nav-item" data-api="ValidationError">ValidationError</a>
+            <a href="#TypeError" class="nav-item" data-api="TypeError">TypeError</a>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div id="api-content">
+        <!-- Default content when no API is selected -->
+        <div class="welcome-section">
+          <h1>Treep Documentation</h1>
+          <p class="intro-text">
+            Welcome to the Treep documentation. Treep is a lightweight, ultra-fast TypeScript library for graph and tree data structures with comprehensive traversal algorithms.
+          </p>
+          <p class="intro-text">
+            Use the sidebar to browse the API reference, or search for a specific method.
+          </p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/api-data.js"></script>
+  <script src="assets/script.js"></script>
+</body>
+</html>

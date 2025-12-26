@@ -43,9 +43,10 @@ This document outlines the planned features and improvements for Treep.
 - [x] Lazy evaluation for large result sets
 - [x] Streaming support for huge JSON files
 
-### Phase 5: Documentation
-- [] Github Pages
-- [] Documentation
+### Phase 5: Documentation 🚧
+- [x] Documentation site with dark/light mode toggle
+- [x] User-friendly examples and code snippets
+- [ ] Github Pages deployment
 
 ## Long-term Goals
 

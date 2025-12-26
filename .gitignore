@@ -14,7 +14,9 @@ coverage/
 *.lcov
 
 # Documentation
-docs/
+# Ignore TypeDoc generated docs, but keep static HTML docs
+docs/api/
+docs/assets/typedoc/
 
 # IDE
 .vscode/
