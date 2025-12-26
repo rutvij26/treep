@@ -51,6 +51,55 @@ describe('Graph', () => {
       expect(branch.weight).toBe(5);
     });
 
+    it('should add branch using string IDs', () => {
+      graph.addLeaf({ name: 'Alice' }, 'alice');
+      graph.addLeaf({ name: 'Bob' }, 'bob');
+      const branch = graph.addBranch('alice', 'bob');
+
+      const alice = graph.getLeaf('alice');
+      const bob = graph.getLeaf('bob');
+      expect(branch.from).toBe(alice);
+      expect(branch.to).toBe(bob);
+      expect(graph.hasBranch(alice!, bob!)).toBe(true);
+    });
+
+    it('should add branch using number IDs', () => {
+      graph.addLeaf({ name: 'Alice' }, 1);
+      graph.addLeaf({ name: 'Bob' }, 2);
+      const branch = graph.addBranch(1, 2);
+
+      const alice = graph.getLeaf(1);
+      const bob = graph.getLeaf(2);
+      expect(branch.from).toBe(alice);
+      expect(branch.to).toBe(bob);
+      expect(graph.hasBranch(alice!, bob!)).toBe(true);
+    });
+
+    it('should add branch mixing Node objects and IDs', () => {
+      const alice = graph.addLeaf({ name: 'Alice' }, 'alice');
+      graph.addLeaf({ name: 'Bob' }, 'bob');
+      const branch = graph.addBranch(alice, 'bob');
+
+      const bob = graph.getLeaf('bob');
+      expect(branch.from).toBe(alice);
+      expect(branch.to).toBe(bob);
+      expect(graph.hasBranch(alice, bob!)).toBe(true);
+    });
+
+    it('should throw error when source ID not found', () => {
+      graph.addLeaf({ name: 'Bob' }, 'bob');
+      expect(() => {
+        graph.addBranch('nonexistent', 'bob');
+      }).toThrow(GraphError);
+    });
+
+    it('should throw error when target ID not found', () => {
+      graph.addLeaf({ name: 'Alice' }, 'alice');
+      expect(() => {
+        graph.addBranch('alice', 'nonexistent');
+      }).toThrow(GraphError);
+    });
+
     it('should throw error if source leaf not in graph', () => {
       const alice = new Node('alice', { name: 'Alice' });
       const bob = graph.addLeaf({ name: 'Bob' }, 'bob');

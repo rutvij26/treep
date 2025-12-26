@@ -49,31 +49,68 @@ export class Graph<T> {
 
   /**
    * Add a branch (edge) between two leaves
-   * @param from - Source leaf
-   * @param to - Target leaf
+   * @param from - Source leaf or its ID
+   * @param to - Target leaf or its ID
    * @param weight - Optional weight for the branch
    * @returns The created branch
    */
-  addBranch(from: Node<T>, to: Node<T>, weight?: number): Branch<T> {
-    if (!this.leavesMap.has(from.id)) {
+  addBranch(
+    from: Node<T> | string | number,
+    to: Node<T> | string | number,
+    weight?: number
+  ): Branch<T> {
+    // Resolve from leaf
+    let fromLeaf: Node<T>;
+    if (from instanceof Node) {
+      fromLeaf = from;
+    } else {
+      const leaf = this.getLeaf(from);
+      if (!leaf) {
+        throw new GraphError(
+          `Source leaf with id "${from}" not found in graph`,
+          'LEAF_NOT_FOUND',
+          String(from)
+        );
+      }
+      fromLeaf = leaf;
+    }
+
+    // Resolve to leaf
+    let toLeaf: Node<T>;
+    if (to instanceof Node) {
+      toLeaf = to;
+    } else {
+      const leaf = this.getLeaf(to);
+      if (!leaf) {
+        throw new GraphError(
+          `Target leaf with id "${to}" not found in graph`,
+          'LEAF_NOT_FOUND',
+          String(to)
+        );
+      }
+      toLeaf = leaf;
+    }
+
+    // Validate leaves exist in graph
+    if (!this.leavesMap.has(fromLeaf.id)) {
       throw new GraphError(
-        `Source leaf with id "${from.id}" not found in graph`,
+        `Source leaf with id "${fromLeaf.id}" not found in graph`,
         'LEAF_NOT_FOUND',
-        from.id.toString()
+        String(fromLeaf.id)
       );
     }
 
-    if (!this.leavesMap.has(to.id)) {
+    if (!this.leavesMap.has(toLeaf.id)) {
       throw new GraphError(
-        `Target leaf with id "${to.id}" not found in graph`,
+        `Target leaf with id "${toLeaf.id}" not found in graph`,
         'LEAF_NOT_FOUND',
-        to.id.toString()
+        String(toLeaf.id)
       );
     }
 
-    const branch = new Branch(from, to, weight);
+    const branch = new Branch(fromLeaf, toLeaf, weight);
     this.branchesSet.add(branch);
-    from.addBranch(branch);
+    fromLeaf.addBranch(branch);
     this._branchesDirty = true;
 
     return branch;
