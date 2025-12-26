@@ -33,7 +33,6 @@
   "bugs": {
     "url": "https://github.com/rutvij26/treep/issues"
   },
-  "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "exports": {
@@ -52,7 +51,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "rollup -c rollup.config.mjs",
+    "build": "rollup -c rollup.config.mjs && node -e \"require('fs').writeFileSync('dist/esm/package.json', JSON.stringify({type:'module'}, null, 2))\"",
     "build:esm": "rollup -c --environment BUILD:esm",
     "build:cjs": "rollup -c --environment BUILD:cjs",
     "build:types": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
@@ -71,6 +70,10 @@
     "example:social": "ts-node examples/social-network.ts",
     "example:supply": "ts-node examples/supply-chain.ts",
     "example:json": "ts-node examples/nested-json.ts",
+    "test:esm": "node test-esm.mjs",
+    "test:cjs": "node test-cjs.cjs",
+    "test:imports": "npm run test:cjs && npm run test:package-link",
+    "test:package-link": "node test-package-link.mjs",
     "prepublishOnly": "npm run test && npm run build && npm run size"
   },
   "devDependencies": {

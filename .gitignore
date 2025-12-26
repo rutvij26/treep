@@ -41,6 +41,9 @@ yarn-error.log*
 tmp/
 temp/
 *.tmp
+.test-link/
+test-*.mjs
+test-*.cjs
 
 # OS
 Thumbs.db
