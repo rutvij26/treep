@@ -267,20 +267,20 @@ describe('Full Integration Tests', () => {
     }
     mkdirSync(tempDir, { recursive: true });
 
-    // Create package.json - use treep@latest from npm
+    // Create package.json - use local treep package for development testing
     const packageJson = {
       name: 'treep-full-integration-test',
       version: '1.0.0',
       type: 'module',
       description: 'Full integration test for treep',
       dependencies: {
-        treep: 'latest',
+        treep: `file:${join(__dirname, '../..').replace(/\\/g, '/')}`,
       },
     };
 
     writeFileSync(join(tempDir, 'package.json'), JSON.stringify(packageJson, null, 2));
 
-    // Install treep@latest from npm
+    // Install local treep
     execSync('npm install', { cwd: tempDir, stdio: 'pipe' });
   });
 

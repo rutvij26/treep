@@ -112,10 +112,26 @@ jobs:
         run: |
           cat > test-browser.mjs <<'EOF'
           import { chromium } from 'playwright';
+          import { readFileSync } from 'fs';
+          import { fileURLToPath } from 'url';
+          import { dirname, join } from 'path';
+
+          const __filename = fileURLToPath(import.meta.url);
+          const __dirname = dirname(__filename);
+          const htmlPath = join(__dirname, 'test.html');
+          const htmlContent = readFileSync(htmlPath, 'utf-8');
+
           const browser = await chromium.launch();
           const page = await browser.newPage();
-          const url = 'file://' + process.cwd() + '/test.html';
-          await page.goto(url);
+
+          // Set up page error handler
+          page.on('console', msg => console.log('Browser:', msg.text()));
+          page.on('pageerror', err => console.error('Page error:', err));
+
+          // Load HTML content directly
+          await page.setContent(htmlContent, { waitUntil: 'networkidle' });
+
+          // Wait for test to complete
           await page.waitForFunction(() => window.testPassed === true, { timeout: 10000 });
           console.log('✅ Browser integration test passed');
           await browser.close();
@@ -140,11 +156,12 @@ jobs:
         run: |
           mkdir -p .test-react
           cd .test-react
-          npx create-react-app@latest . --template typescript --skip-git
+          npx create-react-app@latest test-react-app --template typescript --skip-git
+          cd test-react-app
           npm install treep@latest
 
       - name: Create React test component
-        working-directory: .test-react/src
+        working-directory: .test-react/test-react-app/src
         run: |
           cat > TreepTest.tsx <<'EOF'
           import { useEffect } from 'react';
@@ -181,7 +198,7 @@ jobs:
           EOF
 
       - name: Run React tests
-        working-directory: .test-react
+        working-directory: .test-react/test-react-app
         run: npm test -- --watchAll=false --passWithNoTests
 
       - name: Cleanup
@@ -202,12 +219,12 @@ jobs:
         run: |
           mkdir -p .test-vue
           cd .test-vue
-          npm create vue@latest . -- --typescript --no-install
-          npm install
+          npm create vue@latest test-vue-app -- --typescript
+          cd test-vue-app
           npm install treep@latest
 
       - name: Create Vue test component
-        working-directory: .test-vue/src/components
+        working-directory: .test-vue/test-vue-app/src/components
         run: |
           cat > TreepTest.vue <<'EOF'
           <script setup lang="ts">
@@ -231,7 +248,7 @@ jobs:
           EOF
 
       - name: Create Vue test file
-        working-directory: .test-vue
+        working-directory: .test-vue/test-vue-app
         run: |
           cat > src/components/TreepTest.spec.ts <<'EOF'
           import { mount } from '@vue/test-utils';
@@ -249,7 +266,7 @@ jobs:
           EOF
 
       - name: Run Vue tests
-        working-directory: .test-vue
+        working-directory: .test-vue/test-vue-app
         run: npm run test:unit
 
       - name: Cleanup
@@ -270,12 +287,13 @@ jobs:
         run: |
           mkdir -p .test-angular
           cd .test-angular
-          npx @angular/cli@latest new . --routing=false --style=css --skip-git --package-manager=npm --skip-install
+          npx @angular/cli@latest new test-angular-app --routing=false --style=css --skip-git --package-manager=npm --skip-install
+          cd test-angular-app
           npm install
           npm install treep@latest
 
       - name: Create Angular test component
-        working-directory: .test-angular/src/app
+        working-directory: .test-angular/test-angular-app/src/app
         run: |
           cat > treep-test.component.ts <<'EOF'
           import { Component, OnInit } from '@angular/core';
@@ -300,7 +318,7 @@ jobs:
           EOF
 
       - name: Create Angular test file
-        working-directory: .test-angular/src/app
+        working-directory: .test-angular/test-angular-app/src/app
         run: |
           cat > treep-test.component.spec.ts <<'EOF'
           import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -330,7 +348,7 @@ jobs:
           EOF
 
       - name: Run Angular tests
-        working-directory: .test-angular
+        working-directory: .test-angular/test-angular-app
         run: npm test -- --watch=false --browsers=ChromeHeadless
 
       - name: Cleanup
