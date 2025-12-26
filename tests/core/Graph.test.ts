@@ -24,6 +24,31 @@ describe('Graph', () => {
       expect(typeof leaf.id).toBe('string');
     });
 
+    it('should use string value as ID when no ID provided', () => {
+      const stringGraph = new Graph<string>();
+      const leaf = stringGraph.addLeaf('A');
+      expect(leaf.id).toBe('A');
+      expect(leaf.value).toBe('A');
+    });
+
+    it('should use number value as ID when no ID provided', () => {
+      const numberGraph = new Graph<number>();
+      const leaf = numberGraph.addLeaf(42);
+      expect(leaf.id).toBe(42);
+      expect(leaf.value).toBe(42);
+    });
+
+    it('should allow addBranch with string IDs after addLeaf without ID', () => {
+      const stringGraph = new Graph<string>();
+      const nodeA = stringGraph.addLeaf('A');
+      const nodeB = stringGraph.addLeaf('B');
+
+      // Should be able to use string IDs in addBranch
+      const branch = stringGraph.addBranch('A', 'B');
+      expect(branch.from).toBe(nodeA);
+      expect(branch.to).toBe(nodeB);
+    });
+
     it('should throw error on duplicate ID', () => {
       graph.addLeaf({ name: 'Alice' }, 'alice');
       expect(() => {
