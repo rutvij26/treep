@@ -1,6 +1,6 @@
 {
   "name": "treep",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Lightweight, ultra-fast TypeScript library for graph and tree data structures with comprehensive traversal algorithms",
   "keywords": [
     "graph",
