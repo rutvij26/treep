@@ -42,8 +42,14 @@ tmp/
 temp/
 *.tmp
 .test-link/
-test-*.mjs
-test-*.cjs
+.integration-test/
+.full-integration-test/
+.test-node/
+.test-browser/
+.test-react/
+.test-vue/
+.test-angular/
+.test-rn/
 
 # OS
 Thumbs.db

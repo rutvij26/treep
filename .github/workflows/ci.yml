@@ -34,6 +34,11 @@ jobs:
       - name: Run type check
         run: npx tsc --noEmit
 
+      - name: Build project
+        run: npm run build
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Run tests
         run: npm test
 
@@ -46,10 +51,8 @@ jobs:
           report_type: test_results
           fail_ci_if_error: false
 
-      - name: Build project
-        run: npm run build
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
       - name: Check bundle size
         run: npm run size
+
+      - name: Run integration tests
+        run: npm run test:integration

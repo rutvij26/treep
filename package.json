@@ -1,6 +1,6 @@
 {
   "name": "treep",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "Lightweight, ultra-fast TypeScript library for graph and tree data structures with comprehensive traversal algorithms",
   "keywords": [
     "graph",
@@ -70,10 +70,8 @@
     "example:social": "ts-node examples/social-network.ts",
     "example:supply": "ts-node examples/supply-chain.ts",
     "example:json": "ts-node examples/nested-json.ts",
-    "test:esm": "node test-esm.mjs",
-    "test:cjs": "node test-cjs.cjs",
-    "test:imports": "npm run test:cjs && npm run test:package-link",
-    "test:package-link": "node test-package-link.mjs",
+    "test:integration": "jest tests/integration",
+    "test:full-integration": "jest tests/integration/full-examples.test.ts",
     "prepublishOnly": "npm run test && npm run build && npm run size"
   },
   "devDependencies": {
