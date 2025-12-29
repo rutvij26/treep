@@ -123,10 +123,14 @@ jobs:
             elif echo "$commit" | grep -qiE "^fix(\(.+\))?:"; then
               HAS_PATCH=true
               echo "  → Fix detected: $commit"
-            # Check for other changes (docs, style, refactor, etc.) - these are patch level
-            elif echo "$commit" | grep -qiE "^(docs|style|refactor|perf|test|chore|build|ci)(\(.+\))?:"; then
+            # Check for other changes (refactor, perf, test, etc.) - these are patch level
+            # Note: docs and chore commits are excluded from version bumps
+            elif echo "$commit" | grep -qiE "^(refactor|perf|test|style|build|ci)(\(.+\))?:"; then
               HAS_PATCH=true
               echo "  → Other change detected: $commit"
+            # Skip docs and chore commits - they don't trigger version bumps
+            elif echo "$commit" | grep -qiE "^(docs|chore)(\(.+\))?:"; then
+              echo "  → Skipped (docs/chore): $commit"
             fi
           done <<< "$COMMITS"
 
