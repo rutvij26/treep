@@ -1,3 +1,64 @@
+// Mobile menu toggle
+(function() {
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebar');
+  const sidebarOverlay = document.getElementById('sidebarOverlay');
+  
+  function toggleMenu() {
+    const isOpen = sidebar.classList.contains('open');
+    sidebar.classList.toggle('open');
+    if (sidebarOverlay) {
+      sidebarOverlay.classList.toggle('active');
+    }
+    menuToggle.setAttribute('aria-expanded', !isOpen);
+    
+    // Prevent body scroll when menu is open on mobile
+    if (!isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  function closeMenu() {
+    sidebar.classList.remove('open');
+    if (sidebarOverlay) {
+      sidebarOverlay.classList.remove('active');
+    }
+    menuToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  
+  if (menuToggle && sidebar) {
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    // Close sidebar when clicking on overlay
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener('click', closeMenu);
+    }
+
+    // Close sidebar when clicking on a nav item (mobile)
+    const navItems = sidebar.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        if (window.innerWidth <= 1024) {
+          closeMenu();
+        }
+      });
+    });
+
+    // Close sidebar on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+        closeMenu();
+      }
+    });
+  }
+})();
+
 // Theme management
 (function() {
   const themeToggle = document.getElementById('themeToggle');

@@ -117,6 +117,55 @@ body {
   align-items: center;
 }
 
+/* Hamburger menu button */
+.menu-toggle {
+  display: none; /* Hidden on desktop */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: var(--text-primary);
+  transition: opacity 0.2s;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.menu-toggle:hover {
+  opacity: 0.7;
+}
+
+.menu-toggle[aria-expanded="true"] .hamburger span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle[aria-expanded="true"] .hamburger span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle[aria-expanded="true"] .hamburger span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  width: 24px;
+  height: 18px;
+  justify-content: space-between;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
 .github-link {
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
@@ -601,20 +650,32 @@ body {
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .menu-toggle {
+    display: flex; /* Show hamburger menu on tablet and below */
+  }
+
   .sidebar {
     position: fixed;
-    left: -100%;
+    left: 0;
+    top: 60px;
+    height: calc(100vh - 60px);
+    transform: translateX(-100%);
     z-index: 200;
-    transition: left 0.3s ease;
+    box-shadow: 2px 0 10px var(--shadow-lg);
   }
 
   .sidebar.open {
-    left: 0;
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay.active {
+    display: block;
   }
 
   .main-content {
+    margin-left: 0;
     max-width: 100%;
-    padding: 2rem;
+    padding: 2rem 1.5rem;
   }
 }
 
