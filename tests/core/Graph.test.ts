@@ -24,6 +24,31 @@ describe('Graph', () => {
       expect(typeof leaf.id).toBe('string');
     });
 
+    it('should use string value as ID when no ID provided', () => {
+      const stringGraph = new Graph<string>();
+      const leaf = stringGraph.addLeaf('A');
+      expect(leaf.id).toBe('A');
+      expect(leaf.value).toBe('A');
+    });
+
+    it('should use number value as ID when no ID provided', () => {
+      const numberGraph = new Graph<number>();
+      const leaf = numberGraph.addLeaf(42);
+      expect(leaf.id).toBe(42);
+      expect(leaf.value).toBe(42);
+    });
+
+    it('should allow addBranch with string IDs after addLeaf without ID', () => {
+      const stringGraph = new Graph<string>();
+      const nodeA = stringGraph.addLeaf('A');
+      const nodeB = stringGraph.addLeaf('B');
+
+      // Should be able to use string IDs in addBranch
+      const branch = stringGraph.addBranch('A', 'B');
+      expect(branch.from).toBe(nodeA);
+      expect(branch.to).toBe(nodeB);
+    });
+
     it('should throw error on duplicate ID', () => {
       graph.addLeaf({ name: 'Alice' }, 'alice');
       expect(() => {
@@ -250,6 +275,7 @@ describe('Graph', () => {
       // Test line 227: throw when ID generation fails after 1000 attempts
       // This is hard to trigger naturally, but we can mock Date.now to create collisions
       const originalDateNow = Date.now;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       let callCount = 0;
       const mockTimestamp = 1234567890;
 

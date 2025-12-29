@@ -1,23 +1,272 @@
-name: Release
+name: Semantic Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version_type:
-        description: 'Version bump type (auto, major, minor, patch)'
-        required: false
-        default: 'auto'
-        type: choice
-        options:
-          - auto
-          - major
-          - minor
-          - patch
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
 
 jobs:
-  release:
+  version-bump:
+    name: Bump Version on PR
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
+      - name: Check if last commit is version bump
+        id: skip_check
+        run: |
+          LAST_COMMIT=$(git log -1 --pretty=format:"%s")
+          if echo "$LAST_COMMIT" | grep -qiE "chore: bump version"; then
+            echo "Last commit is a version bump, will check if version is already correct"
+            echo "skip_analysis=false" >> $GITHUB_OUTPUT
+            echo "is_version_commit=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip_analysis=false" >> $GITHUB_OUTPUT
+            echo "is_version_commit=false" >> $GITHUB_OUTPUT
+          fi
+          echo "Last commit: $LAST_COMMIT"
+
+      - name: Configure Git
+        if: steps.skip_check.outputs.skip_analysis == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch base branch
+        if: steps.skip_check.outputs.skip_analysis == 'false'
+        run: |
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          git fetch origin ${BASE_BRANCH}:${BASE_BRANCH} || echo "Base branch ${BASE_BRANCH} not found, will use all commits"
+
+      - name: Use Node.js
+        if: steps.skip_check.outputs.skip_analysis == 'false'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: steps.skip_check.outputs.skip_analysis == 'false'
+        run: npm ci --legacy-peer-deps
+
+      - name: Analyze conventional commits and bump version
+        if: steps.skip_check.outputs.skip_analysis == 'false'
+        id: version
+        run: |
+          # Get base branch (usually main)
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+
+          # Get base branch version (from origin/base, not current branch)
+          if git rev-parse --verify origin/${BASE_BRANCH} > /dev/null 2>&1; then
+            BASE_VERSION=$(git show origin/${BASE_BRANCH}:package.json 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync(0, 'utf-8')).version" 2>/dev/null || echo "")
+            if [ -z "$BASE_VERSION" ]; then
+              # Fallback: try to get from current package.json if base branch doesn't have it
+              BASE_VERSION=$(node -p "require('./package.json').version")
+            fi
+          else
+            # If base branch not available, use current version
+            BASE_VERSION=$(node -p "require('./package.json').version")
+          fi
+
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "Base branch version: $BASE_VERSION"
+          echo "Current branch version: $CURRENT_VERSION"
+
+          # Get ALL commits in PR branch compared to base branch
+          # This ensures we analyze the entire PR, not just new commits
+          if git rev-parse --verify origin/${BASE_BRANCH} > /dev/null 2>&1; then
+            COMMITS=$(git log origin/${BASE_BRANCH}..HEAD --pretty=format:"%s" --no-merges || echo "")
+          else
+            # If base branch not available, get all commits in PR branch
+            COMMITS=$(git log --pretty=format:"%s" --no-merges || echo "")
+          fi
+
+          if [ -z "$COMMITS" ]; then
+            echo "No commits found in PR branch"
+            echo "bump=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "Analyzing commits:"
+          echo "$COMMITS" | while IFS= read -r commit; do
+            echo "  - $commit"
+          done
+
+          # Analyze ALL conventional commits to determine highest version type needed
+          HAS_MAJOR=false
+          HAS_MINOR=false
+          HAS_PATCH=false
+
+          while IFS= read -r commit; do
+            # Check for breaking changes (highest priority)
+            if echo "$commit" | grep -qiE "(BREAKING CHANGE|^[^:]*!:|^[^:]*\([^)]*\)!:)"; then
+              HAS_MAJOR=true
+              echo "  → Breaking change detected: $commit"
+            # Check for features
+            elif echo "$commit" | grep -qiE "^feat(\(.+\))?:"; then
+              HAS_MINOR=true
+              echo "  → Feature detected: $commit"
+            # Check for fixes
+            elif echo "$commit" | grep -qiE "^fix(\(.+\))?:"; then
+              HAS_PATCH=true
+              echo "  → Fix detected: $commit"
+            # Check for other changes (docs, style, refactor, etc.) - these are patch level
+            elif echo "$commit" | grep -qiE "^(docs|style|refactor|perf|test|chore|build|ci)(\(.+\))?:"; then
+              HAS_PATCH=true
+              echo "  → Other change detected: $commit"
+            fi
+          done <<< "$COMMITS"
+
+          # Determine version bump type based on highest priority found
+          if [ "$HAS_MAJOR" = true ]; then
+            VERSION_TYPE="major"
+          elif [ "$HAS_MINOR" = true ]; then
+            VERSION_TYPE="minor"
+          elif [ "$HAS_PATCH" = true ]; then
+            VERSION_TYPE="patch"
+          else
+            echo "No conventional commits found, skipping version bump"
+            echo "bump=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "Version type needed: $VERSION_TYPE"
+
+          # Calculate target version based on BASE branch version, not current branch version
+          IFS='.' read -r BASE_MAJOR BASE_MINOR BASE_PATCH <<< "${BASE_VERSION##v}"
+
+          case "$VERSION_TYPE" in
+            major)
+              TARGET_MAJOR=$((BASE_MAJOR + 1))
+              TARGET_MINOR=0
+              TARGET_PATCH=0
+              ;;
+            minor)
+              TARGET_MAJOR=$BASE_MAJOR
+              TARGET_MINOR=$((BASE_MINOR + 1))
+              TARGET_PATCH=0
+              ;;
+            patch)
+              TARGET_MAJOR=$BASE_MAJOR
+              TARGET_MINOR=$BASE_MINOR
+              TARGET_PATCH=$((BASE_PATCH + 1))
+              ;;
+          esac
+
+          TARGET_VERSION="${TARGET_MAJOR}.${TARGET_MINOR}.${TARGET_PATCH}"
+
+          echo "Base version: $BASE_VERSION"
+          echo "Target version: $TARGET_VERSION"
+          echo "Current version: $CURRENT_VERSION"
+
+          # Only bump if current version doesn't match target version
+          if [ "$CURRENT_VERSION" = "$TARGET_VERSION" ]; then
+            echo "Version is already $TARGET_VERSION, no bump needed"
+            echo "bump=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "base_version=$BASE_VERSION" >> $GITHUB_OUTPUT
+          echo "version=$TARGET_VERSION" >> $GITHUB_OUTPUT
+          echo "version_type=$VERSION_TYPE" >> $GITHUB_OUTPUT
+          echo "bump=true" >> $GITHUB_OUTPUT
+          echo "Bumping version from $CURRENT_VERSION to $TARGET_VERSION ($VERSION_TYPE)"
+
+      - name: Update package.json version
+        if: steps.version.outputs.bump == 'true'
+        run: |
+          NEW_VERSION="${{ steps.version.outputs.version }}"
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+
+          # Double-check version hasn't changed
+          if [ "$CURRENT_VERSION" = "$NEW_VERSION" ]; then
+            echo "Version is already $NEW_VERSION, skipping update"
+            exit 0
+          fi
+
+          npm version $NEW_VERSION --no-git-tag-version
+          echo "Updated package.json from $CURRENT_VERSION to $NEW_VERSION"
+
+      - name: Check for changes
+        if: steps.version.outputs.bump == 'true'
+        id: changes
+        run: |
+          if git diff --quiet package.json package-lock.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit version bump
+        if: steps.version.outputs.bump == 'true' && steps.changes.outputs.changed == 'true'
+        run: |
+          git add package.json package-lock.json
+          git commit -m "chore: bump version to ${{ steps.version.outputs.version }}"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          echo "Version bumped to ${{ steps.version.outputs.version }}"
+
+      - name: Add PR comment
+        if: steps.version.outputs.bump == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const version = '${{ steps.version.outputs.version }}';
+            const versionType = '${{ steps.version.outputs.version_type }}';
+            const currentVersion = '${{ steps.version.outputs.current_version }}';
+            const body = `## 📦 Version Bump
+
+            This PR will bump the version from \`${currentVersion}\` to \`${version}\` (${versionType}).
+
+            **Version bump type:** ${versionType}
+            **New version:** ${version}
+
+            This version bump is based on conventional commit messages in this PR.`;
+
+            // Check if comment already exists
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existingComment = comments.data.find(
+              comment => comment.user.type === 'Bot' && comment.body.includes('Version Bump')
+            );
+
+            if (existingComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body,
+              });
+            }
+
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     permissions:
       contents: write
       id-token: write
@@ -32,69 +281,58 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Get version for manual dispatch
-        if: github.event_name == 'workflow_dispatch'
-        id: manual_version
-        run: |
-          VERSION_TYPE="${{ github.event.inputs.version_type }}"
-          CURRENT_VERSION=$(node -p "require('./package.json').version")
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
 
-          if [ "$VERSION_TYPE" = "auto" ] || [ -z "$VERSION_TYPE" ]; then
-            if [ "$LATEST_TAG" != "v0.0.0" ]; then
-              COMMITS=$(git log ${LATEST_TAG}..HEAD --pretty=format:"%s" --no-merges)
-            else
-              COMMITS=$(git log --pretty=format:"%s" --no-merges)
-            fi
-            
-            MAJOR=false
-            MINOR=false
-            
-            while IFS= read -r commit; do
-              if echo "$commit" | grep -qiE "(BREAKING CHANGE|!|^[^:]*!:)"; then
-                MAJOR=true
-              fi
-              if echo "$commit" | grep -qiE "^feat(\(.+\))?:"; then
-                MINOR=true
-              fi
-            done <<< "$COMMITS"
-            
-            if [ "$MAJOR" = true ]; then
-              VERSION_TYPE="major"
-            elif [ "$MINOR" = true ]; then
-              VERSION_TYPE="minor"
-            else
-              VERSION_TYPE="patch"
-            fi
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Check bundle size
+        run: npm run size
+
+      - name: Get version from package.json
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v${VERSION}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Current version: $VERSION"
+
+      - name: Check if version already published
+        id: check
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if npm view treep@$VERSION version > /dev/null 2>&1; then
+            echo "Version $VERSION already published, skipping"
+            echo "published=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version $VERSION not published, will publish"
+            echo "published=false" >> $GITHUB_OUTPUT
           fi
 
-          IFS='.' read -r MAJOR MINOR PATCH <<< "${CURRENT_VERSION##v}"
-
-          case "$VERSION_TYPE" in
-            major)
-              MAJOR=$((MAJOR + 1))
-              MINOR=0
-              PATCH=0
-              ;;
-            minor)
-              MINOR=$((MINOR + 1))
-              PATCH=0
-              ;;
-            patch)
-              PATCH=$((PATCH + 1))
-              ;;
-          esac
-
-          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
-          NEW_TAG="v${NEW_VERSION}"
-
-          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
-          echo "tag=$NEW_TAG" >> $GITHUB_OUTPUT
+      - name: Publish to npm
+        if: steps.check.outputs.published == 'false'
+        run: npm publish --access public --provenance
+        # Uses Trusted Publishing (OIDC) - no token needed
 
       - name: Generate changelog
+        if: steps.check.outputs.published == 'false'
         id: changelog
         run: |
-          TAG="${{ steps.manual_version.outputs.tag }}"
+          TAG="${{ steps.version.outputs.tag }}"
           LATEST_TAG=$(git describe --tags --abbrev=0 ${TAG}^ 2>/dev/null || echo "")
 
           if [ -n "$LATEST_TAG" ]; then
@@ -122,47 +360,20 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create and push tag
-        if: github.event_name == 'workflow_dispatch'
+        if: steps.check.outputs.published == 'false'
         run: |
-          TAG="${{ steps.manual_version.outputs.tag }}"
+          TAG="${{ steps.version.outputs.tag }}"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git tag -a "$TAG" -m "Release $TAG"
           git push origin "$TAG"
           echo "Created and pushed tag: $TAG"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
-
-      - name: Run tests
-        run: npm test
-
-      - name: Build project
-        run: npm run build
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Check bundle size
-        run: npm run size
-
-      - name: Publish to npm
-        run: npm publish --access public --provenance
-        # Uses Trusted Publishing (OIDC) - no token needed
-        # Make sure Trusted Publishing is enabled in npm for this repository
 
       - name: Create GitHub Release
+        if: steps.check.outputs.published == 'false'
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.manual_version.outputs.tag }}
-          name: Release ${{ steps.manual_version.outputs.tag }}
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Release ${{ steps.version.outputs.tag }}
           body: ${{ steps.changelog.outputs.body }}
           draft: false
           prerelease: false

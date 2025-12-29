@@ -29,12 +29,17 @@ export class Graph<T> {
   /**
    * Add a leaf (node) to the graph
    * @param value - The value stored in the leaf
-   * @param id - Optional ID for the leaf (auto-generated if not provided)
+   * @param id - Optional ID for the leaf (auto-generated if not provided, or uses value if value is string/number)
    * @returns The created leaf
    */
   addLeaf(value: T, id?: string | number): Node<T> {
     if (id === undefined) {
-      id = this.generateId();
+      // If value is a string or number, use it as the ID for convenience
+      if (typeof value === 'string' || typeof value === 'number') {
+        id = value;
+      } else {
+        id = this.generateId();
+      }
     }
 
     if (this.leavesMap.has(id)) {
@@ -253,7 +258,11 @@ export class Graph<T> {
   /**
    * Generate a unique ID for a leaf
    */
-  private generateId(): string {
+  /**
+   * Generate a unique ID for a leaf
+   * @returns A unique ID string
+   */
+  generateId(): string {
     let id: string;
     let counter = 0;
     do {
