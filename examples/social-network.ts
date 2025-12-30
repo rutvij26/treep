@@ -23,9 +23,10 @@ socialNetwork.addBranch(charlie, diana);
 
 // BFS traversal to find all connections
 console.log('BFS Traversal:');
-BFS(alice, (leaf) => {
+const bfsResult = BFS(alice, (leaf) => {
   console.log(`  - ${leaf.value.name} (${leaf.value.city})`);
 });
+console.log(`  Total visited: ${bfsResult.visited.length}`);
 
 // Find shortest path between two users
 console.log('\nShortest path from Alice to Charlie:');
