@@ -4,8 +4,8 @@ export { Branch } from './core/Branch';
 export { Graph } from './core/Graph';
 
 // Algorithms
-export { BFS } from './algorithms/bfs';
-export { DFS } from './algorithms/dfs';
+export { BFS, type BFSResult } from './algorithms/bfs';
+export { DFS, type DFSResult } from './algorithms/dfs';
 export { shortestPath } from './algorithms/shortestPath';
 export { detectCycles } from './algorithms/cycleDetection';
 export { allPaths } from './algorithms/allPaths';

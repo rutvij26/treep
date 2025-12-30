@@ -1,216 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Treep - Graph & Tree Library Documentation</title>
-  <meta name="description" content="Comprehensive documentation for Treep - a lightweight, ultra-fast TypeScript library for graph and tree data structures">
-  <link rel="stylesheet" href="assets/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-</head>
-<body>
-  <!-- Header -->
-  <header class="header">
-    <div class="header-content">
-      <div class="logo">
-        <a href="#getting-started" class="logo-link" id="logoLink">
-          <h1>🌳 Treep</h1>
-        </a>
-        <div class="version-selector">
-          <select id="versionSelect" class="version-select">
-            <option value="latest">v1.4.1 (latest)</option>
-            <option value="1.4.1">v1.4.1</option>
-            <option value="1.4.0">v1.4.0</option>
-            <option value="1.3.2">v1.3.2</option>
-            <option value="1.3.1">v1.3.1</option>
-            <option value="1.3.0">v1.3.0</option>
-            <option value="1.2.0">v1.2.0</option>
-            <option value="1.1.0">v1.1.0</option>
-            <option value="1.0.0">v1.0.0</option>
-          </select>
-        </div>
-      </div>
-      <div class="header-actions">
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
-          <span class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
-        </button>
-        <a href="https://github.com/rutvij26/treep" target="_blank" rel="noopener" class="github-link" aria-label="GitHub Repository">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-        </a>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-          <span class="theme-icon">🌙</span>
-        </button>
-      </div>
-    </div>
-  </header>
+<!DOCTYPE html><html class="default" lang="en"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>treep</title><meta name="description" content="Documentation for treep"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">treep</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>treep</h1></div><div class="tsd-panel tsd-typography"><a id="md:treep" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Treep<a href="#md:treep" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><p><a href="https://badge.fury.io/js/treep" target="_blank" class="external"><img src="https://badge.fury.io/js/treep.svg" alt="npm version"></a>
+<a href="https://opensource.org/licenses/MIT" target="_blank" class="external"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+<a href="http://www.typescriptlang.org/" target="_blank" class="external"><img src="https://img.shields.io/badge/%3C%2F%3E-TypeScript-%23007ACC.svg" alt="TypeScript"></a></p>
+<p><strong>Treep</strong> is a lightweight, ultra-fast TypeScript library for <strong>graph and tree data structures</strong> with comprehensive traversal algorithms. It uses a clean tree metaphor throughout: <strong>Node → Leaf</strong>, <strong>Edge → Branch</strong>.</p>
+<a id="md:features" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Features<a href="#md:features" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li>🌳 <strong>Tree Metaphor</strong>: Intuitive API using leaves and branches</li>
+<li>⚡ <strong>Ultra-Fast</strong>: Optimized for large datasets (1M+ nodes)</li>
+<li>🔒 <strong>Type-Safe</strong>: Full TypeScript generics with type inference</li>
+<li>📦 <strong>Zero Dependencies</strong>: Pure TypeScript/JavaScript</li>
+<li>🎯 <strong>Framework-Agnostic</strong>: Works in Node.js, browser, React, Vue, Angular, React Native</li>
+<li>🚀 <strong>Comprehensive</strong>: BFS, DFS, shortest path, cycle detection, and more</li>
+<li>✅ <strong>Schema Validation</strong>: Built-in validation with tree path notation</li>
+</ul>
+<a id="md:installation" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Installation<a href="#md:installation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1"> </span><span class="hl-2">treep</span>
+</code><button type="button">Copy</button></pre>
 
-  <!-- Sidebar overlay for mobile -->
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+<a id="md:quick-start" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Quick Start<a href="#md:quick-start" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><pre><code class="typescript"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">Graph</span><span class="hl-1">, </span><span class="hl-4">BFS</span><span class="hl-1">, </span><span class="hl-4">shortestPath</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&#39;treep&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-5">// Create a graph</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">graph</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Graph</span><span class="hl-1">&lt;</span><span class="hl-8">User</span><span class="hl-1">&gt;();</span><br/><br/><span class="hl-5">// Add leaves (nodes)</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">alice</span><span class="hl-1"> = </span><span class="hl-4">graph</span><span class="hl-1">.</span><span class="hl-0">addLeaf</span><span class="hl-1">({ </span><span class="hl-4">name:</span><span class="hl-1"> </span><span class="hl-2">&#39;Alice&#39;</span><span class="hl-1">, </span><span class="hl-4">age:</span><span class="hl-1"> </span><span class="hl-9">30</span><span class="hl-1"> }, </span><span class="hl-2">&#39;alice&#39;</span><span class="hl-1">);</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">bob</span><span class="hl-1"> = </span><span class="hl-4">graph</span><span class="hl-1">.</span><span class="hl-0">addLeaf</span><span class="hl-1">({ </span><span class="hl-4">name:</span><span class="hl-1"> </span><span class="hl-2">&#39;Bob&#39;</span><span class="hl-1">, </span><span class="hl-4">age:</span><span class="hl-1"> </span><span class="hl-9">25</span><span class="hl-1"> }, </span><span class="hl-2">&#39;bob&#39;</span><span class="hl-1">);</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">charlie</span><span class="hl-1"> = </span><span class="hl-4">graph</span><span class="hl-1">.</span><span class="hl-0">addLeaf</span><span class="hl-1">({ </span><span class="hl-4">name:</span><span class="hl-1"> </span><span class="hl-2">&#39;Charlie&#39;</span><span class="hl-1">, </span><span class="hl-4">age:</span><span class="hl-1"> </span><span class="hl-9">35</span><span class="hl-1"> }, </span><span class="hl-2">&#39;charlie&#39;</span><span class="hl-1">);</span><br/><br/><span class="hl-5">// Add branches (edges)</span><br/><span class="hl-4">graph</span><span class="hl-1">.</span><span class="hl-0">addBranch</span><span class="hl-1">(</span><span class="hl-4">alice</span><span class="hl-1">, </span><span class="hl-4">bob</span><span class="hl-1">);</span><br/><span class="hl-4">graph</span><span class="hl-1">.</span><span class="hl-0">addBranch</span><span class="hl-1">(</span><span class="hl-4">bob</span><span class="hl-1">, </span><span class="hl-4">charlie</span><span class="hl-1">);</span><br/><br/><span class="hl-5">// BFS traversal</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">visited</span><span class="hl-1"> = </span><span class="hl-0">BFS</span><span class="hl-1">(</span><span class="hl-4">alice</span><span class="hl-1">, (</span><span class="hl-4">leaf</span><span class="hl-1">) </span><span class="hl-6">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-4">console</span><span class="hl-1">.</span><span class="hl-0">log</span><span class="hl-1">(</span><span class="hl-4">leaf</span><span class="hl-1">.</span><span class="hl-4">value</span><span class="hl-1">.</span><span class="hl-4">name</span><span class="hl-1">);</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-5">// Shortest path</span><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">path</span><span class="hl-1"> = </span><span class="hl-0">shortestPath</span><span class="hl-1">(</span><span class="hl-4">alice</span><span class="hl-1">, </span><span class="hl-4">charlie</span><span class="hl-1">);</span>
+</code><button type="button">Copy</button></pre>
 
-  <div class="layout">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <input type="text" id="sidebarSearch" placeholder="Search API..." class="sidebar-search">
-      </div>
-      <nav class="sidebar-nav">
-        <div class="nav-category">
-          <a href="#getting-started" class="nav-item nav-section-link">Getting Started</a>
-          <a href="#examples" class="nav-item nav-section-link">Examples</a>
-        </div>
-        <div class="nav-category">
-          <button class="nav-category-toggle" data-category="core">
-            <span>Core Classes</span>
-            <span class="toggle-icon">▼</span>
-          </button>
-          <div class="nav-items" data-category="core">
-            <a href="#Graph" class="nav-item" data-api="Graph">Graph</a>
-            <a href="#Node" class="nav-item" data-api="Node">Node</a>
-            <a href="#Branch" class="nav-item" data-api="Branch">Branch</a>
-          </div>
-        </div>
-
-        <div class="nav-category">
-          <button class="nav-category-toggle" data-category="algorithms">
-            <span>Algorithms</span>
-            <span class="toggle-icon">▼</span>
-          </button>
-          <div class="nav-items" data-category="algorithms">
-            <a href="#BFS" class="nav-item" data-api="BFS">BFS</a>
-            <a href="#DFS" class="nav-item" data-api="DFS">DFS</a>
-            <a href="#shortestPath" class="nav-item" data-api="shortestPath">shortestPath</a>
-            <a href="#allPaths" class="nav-item" data-api="allPaths">allPaths</a>
-            <a href="#detectCycles" class="nav-item" data-api="detectCycles">detectCycles</a>
-            <a href="#topologicalSort" class="nav-item" data-api="topologicalSort">topologicalSort</a>
-            <a href="#isDAG" class="nav-item" data-api="isDAG">isDAG</a>
-            <a href="#findConnectedComponents" class="nav-item" data-api="findConnectedComponents">findConnectedComponents</a>
-            <a href="#findStronglyConnectedComponents" class="nav-item" data-api="findStronglyConnectedComponents">findStronglyConnectedComponents</a>
-            <a href="#countConnectedComponents" class="nav-item" data-api="countConnectedComponents">countConnectedComponents</a>
-            <a href="#findPathsWithConstraints" class="nav-item" data-api="findPathsWithConstraints">findPathsWithConstraints</a>
-            <a href="#findShortestPathWithConstraints" class="nav-item" data-api="findShortestPathWithConstraints">findShortestPathWithConstraints</a>
-            <a href="#findPathsAvoiding" class="nav-item" data-api="findPathsAvoiding">findPathsAvoiding</a>
-            <a href="#findPathsThrough" class="nav-item" data-api="findPathsThrough">findPathsThrough</a>
-            <a href="#lazyBFS" class="nav-item" data-api="lazyBFS">lazyBFS</a>
-            <a href="#lazyDFS" class="nav-item" data-api="lazyDFS">lazyDFS</a>
-            <a href="#lazyFindPaths" class="nav-item" data-api="lazyFindPaths">lazyFindPaths</a>
-            <a href="#lazyAllPaths" class="nav-item" data-api="lazyAllPaths">lazyAllPaths</a>
-            <a href="#lazyFindLeaves" class="nav-item" data-api="lazyFindLeaves">lazyFindLeaves</a>
-            <a href="#preOrder" class="nav-item" data-api="preOrder">preOrder</a>
-            <a href="#inOrder" class="nav-item" data-api="inOrder">inOrder</a>
-            <a href="#postOrder" class="nav-item" data-api="postOrder">postOrder</a>
-            <a href="#levelOrder" class="nav-item" data-api="levelOrder">levelOrder</a>
-            <a href="#treeTraversal" class="nav-item" data-api="treeTraversal">treeTraversal</a>
-          </div>
-        </div>
-
-        <div class="nav-category">
-          <button class="nav-category-toggle" data-category="utilities">
-            <span>Utilities</span>
-            <span class="toggle-icon">▼</span>
-          </button>
-          <div class="nav-items" data-category="utilities">
-            <a href="#toJSON" class="nav-item" data-api="toJSON">toJSON</a>
-            <a href="#toJSONString" class="nav-item" data-api="toJSONString">toJSONString</a>
-            <a href="#fromJSON" class="nav-item" data-api="fromJSON">fromJSON</a>
-            <a href="#fromJSONStream" class="nav-item" data-api="fromJSONStream">fromJSONStream</a>
-            <a href="#toJSONStream" class="nav-item" data-api="toJSONStream">toJSONStream</a>
-            <a href="#toAsyncStream" class="nav-item" data-api="toAsyncStream">toAsyncStream</a>
-            <a href="#getStatistics" class="nav-item" data-api="getStatistics">getStatistics</a>
-            <a href="#findLeaves" class="nav-item" data-api="findLeaves">findLeaves</a>
-            <a href="#findLeaf" class="nav-item" data-api="findLeaf">findLeaf</a>
-            <a href="#findBranches" class="nav-item" data-api="findBranches">findBranches</a>
-            <a href="#findBranch" class="nav-item" data-api="findBranch">findBranch</a>
-            <a href="#filterLeaves" class="nav-item" data-api="filterLeaves">filterLeaves</a>
-            <a href="#filterLeavesByValue" class="nav-item" data-api="filterLeavesByValue">filterLeavesByValue</a>
-            <a href="#filterBranches" class="nav-item" data-api="filterBranches">filterBranches</a>
-            <a href="#filterBranchesByWeight" class="nav-item" data-api="filterBranchesByWeight">filterBranchesByWeight</a>
-            <a href="#extractSubgraph" class="nav-item" data-api="extractSubgraph">extractSubgraph</a>
-            <a href="#extractReachableSubgraph" class="nav-item" data-api="extractReachableSubgraph">extractReachableSubgraph</a>
-            <a href="#toDOT" class="nav-item" data-api="toDOT">toDOT</a>
-            <a href="#toAdjacencyList" class="nav-item" data-api="toAdjacencyList">toAdjacencyList</a>
-            <a href="#toEdgeList" class="nav-item" data-api="toEdgeList">toEdgeList</a>
-            <a href="#toAdjacencyMatrix" class="nav-item" data-api="toAdjacencyMatrix">toAdjacencyMatrix</a>
-            <a href="#reverseGraph" class="nav-item" data-api="reverseGraph">reverseGraph</a>
-            <a href="#transpose" class="nav-item" data-api="transpose">transpose</a>
-            <a href="#toUndirected" class="nav-item" data-api="toUndirected">toUndirected</a>
-            <a href="#normalize" class="nav-item" data-api="normalize">normalize</a>
-            <a href="#mergeGraph" class="nav-item" data-api="mergeGraph">mergeGraph</a>
-            <a href="#renderASCII" class="nav-item" data-api="renderASCII">renderASCII</a>
-            <a href="#validate" class="nav-item" data-api="validate">validate</a>
-            <a href="#validateLeaf" class="nav-item" data-api="validateLeaf">validateLeaf</a>
-            <a href="#validateBranch" class="nav-item" data-api="validateBranch">validateBranch</a>
-            <a href="#validateGraph" class="nav-item" data-api="validateGraph">validateGraph</a>
-            <a href="#validateTree" class="nav-item" data-api="validateTree">validateTree</a>
-            <a href="#findRoot" class="nav-item" data-api="findRoot">findRoot</a>
-            <a href="#isRoot" class="nav-item" data-api="isRoot">isRoot</a>
-            <a href="#getRoot" class="nav-item" data-api="getRoot">getRoot</a>
-            <a href="#getParent" class="nav-item" data-api="getParent">getParent</a>
-            <a href="#getChildren" class="nav-item" data-api="getChildren">getChildren</a>
-            <a href="#getSiblings" class="nav-item" data-api="getSiblings">getSiblings</a>
-            <a href="#getAncestors" class="nav-item" data-api="getAncestors">getAncestors</a>
-            <a href="#getDescendants" class="nav-item" data-api="getDescendants">getDescendants</a>
-            <a href="#getHeight" class="nav-item" data-api="getHeight">getHeight</a>
-            <a href="#getDepth" class="nav-item" data-api="getDepth">getDepth</a>
-            <a href="#getTreeSize" class="nav-item" data-api="getTreeSize">getTreeSize</a>
-            <a href="#getWidth" class="nav-item" data-api="getWidth">getWidth</a>
-            <a href="#isTree" class="nav-item" data-api="isTree">isTree</a>
-            <a href="#isBST" class="nav-item" data-api="isBST">isBST</a>
-            <a href="#isBalanced" class="nav-item" data-api="isBalanced">isBalanced</a>
-            <a href="#isComplete" class="nav-item" data-api="isComplete">isComplete</a>
-            <a href="#isFull" class="nav-item" data-api="isFull">isFull</a>
-            <a href="#isPerfect" class="nav-item" data-api="isPerfect">isPerfect</a>
-            <a href="#bstInsert" class="nav-item" data-api="bstInsert">bstInsert</a>
-            <a href="#bstSearch" class="nav-item" data-api="bstSearch">bstSearch</a>
-            <a href="#bstMin" class="nav-item" data-api="bstMin">bstMin</a>
-            <a href="#bstMax" class="nav-item" data-api="bstMax">bstMax</a>
-            <a href="#bstSuccessor" class="nav-item" data-api="bstSuccessor">bstSuccessor</a>
-            <a href="#bstPredecessor" class="nav-item" data-api="bstPredecessor">bstPredecessor</a>
-            <a href="#bstDelete" class="nav-item" data-api="bstDelete">bstDelete</a>
-          </div>
-        </div>
-
-        <div class="nav-category">
-          <button class="nav-category-toggle" data-category="errors">
-            <span>Error Classes</span>
-            <span class="toggle-icon">▼</span>
-          </button>
-          <div class="nav-items" data-category="errors">
-            <a href="#TreepError" class="nav-item" data-api="TreepError">TreepError</a>
-            <a href="#GraphError" class="nav-item" data-api="GraphError">GraphError</a>
-            <a href="#TreeError" class="nav-item" data-api="TreeError">TreeError</a>
-            <a href="#ValidationError" class="nav-item" data-api="ValidationError">ValidationError</a>
-            <a href="#TypeError" class="nav-item" data-api="TypeError">TypeError</a>
-          </div>
-        </div>
-      </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <div id="api-content">
-        <!-- Default content when no API is selected -->
-        <div class="welcome-section">
-          <h1>Treep Documentation</h1>
-          <p class="intro-text">
-            Welcome to the Treep documentation. Treep is a lightweight, ultra-fast TypeScript library for graph and tree data structures with comprehensive traversal algorithms.
-          </p>
-          <p class="intro-text">
-            Use the sidebar to browse the API reference, or search for a specific method.
-          </p>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <script src="assets/api-data.js"></script>
-  <script src="assets/script.js"></script>
-</body>
-</html>
+<a id="md:requirements" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Requirements<a href="#md:requirements" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li><strong>Node.js</strong>: 20+ (LTS)</li>
+<li><strong>TypeScript</strong>: 5.0+</li>
+<li><strong>Browsers</strong>: Modern browsers only (Chrome, Edge, Firefox, Safari)</li>
+</ul>
+<a id="md:documentation" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Documentation<a href="#md:documentation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>📚 <strong><a href="https://rutvij26.github.io/treep/" target="_blank" class="external">View Full Documentation</a></strong> - Comprehensive guide with examples, API reference, and interactive code snippets.</p>
+<p>See <a href="./examples/">examples</a> for more usage examples.</p>
+<a id="md:author" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Author<a href="#md:author" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p><strong>Rutvij Sathe</strong></p>
+<ul>
+<li>Website: <a href="https://rutvijsathe.dev" target="_blank" class="external">https://rutvijsathe.dev</a></li>
+<li>GitHub: <a href="https://github.com/rutvij26" target="_blank" class="external">https://github.com/rutvij26</a></li>
+</ul>
+<a id="md:license" class="tsd-anchor"></a><h2 class="tsd-anchor-link">License<a href="#md:license" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>MIT © Rutvij Sathe</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#md:treep"><span>Treep</span></a><ul><li><a href="#md:features"><span>Features</span></a></li><li><a href="#md:installation"><span>Installation</span></a></li><li><a href="#md:quick-start"><span>Quick <wbr/>Start</span></a></li><li><a href="#md:requirements"><span>Requirements</span></a></li><li><a href="#md:documentation"><span>Documentation</span></a></li><li><a href="#md:author"><span>Author</span></a></li><li><a href="#md:license"><span>License</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="assets/icons.svg#icon-1"></use></svg><span>treep</span></a><ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="."><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>
